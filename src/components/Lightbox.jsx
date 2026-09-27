@@ -49,7 +49,7 @@ export default function Lightbox({ plates, index, onClose, onStep }) {
           ‹
         </button>
         <img
-          src={`/plates/${plate.id}.jpg`}
+          src={`${import.meta.env.BASE_URL}plates/${plate.id}.jpg`}
           alt={`Plate ${plate.num}: ${plate.caption}`}
           className="max-h-full max-w-full object-contain shadow-2xl"
         />

@@ -28,7 +28,7 @@ the 1915 volume (`The temple of Bîgeh.pdf`). Captions are quoted from Blackman'
 
 ```sh
 npm install
-npm run dev      # http://localhost:5173
+npm run dev      # http://localhost:5173/gateofisis/
 npm run build    # production bundle in dist/
 ```
 
@@ -36,3 +36,8 @@ npm run build    # production bundle in dist/
 
 Vite 8, React 19, Tailwind CSS 4 (`@tailwindcss/vite`). Fonts: Bodoni Moda (display) and
 Old Standard TT (text) from Google Fonts.
+
+## Deployment
+
+Pushes to `main` build and deploy the site to GitHub Pages via
+`.github/workflows/deploy.yml`: https://zetedi.github.io/gateofisis/
