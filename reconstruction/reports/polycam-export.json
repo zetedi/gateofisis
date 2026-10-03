@@ -1,0 +1,127 @@
+[
+  {
+    "key": "site-b",
+    "title": "Gate and waterside platform",
+    "vertices": 118813,
+    "triangles": 208078,
+    "textures": [
+      {
+        "name": "71f9c3020b1f055ab228deaaa21229e9.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "b735511a0d0028f3a2d3bf0991f1506d.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "de040f169b2aa8b1e4edf3b939c2cf0f.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      }
+    ],
+    "bytes": 20648556
+  },
+  {
+    "key": "site-a",
+    "title": "Columns, pavement and loose stones",
+    "vertices": 113951,
+    "triangles": 200365,
+    "textures": [
+      {
+        "name": "0c0c9127b505c0f10c42c4e7ad8f1316.jpg",
+        "size": [
+          4096,
+          1600
+        ]
+      },
+      {
+        "name": "71f9c3020b1f055ab228deaaa21229e9.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "b735511a0d0028f3a2d3bf0991f1506d.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "c7eff322c9dec4449dae24a3b0e05d96.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "de040f169b2aa8b1e4edf3b939c2cf0f.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      }
+    ],
+    "bytes": 12780236
+  },
+  {
+    "key": "upper-stairs",
+    "title": "Top of the gate",
+    "vertices": 56648,
+    "triangles": 101365,
+    "textures": [
+      {
+        "name": "0c0c9127b505c0f10c42c4e7ad8f1316.jpg",
+        "size": [
+          4096,
+          1600
+        ]
+      },
+      {
+        "name": "71f9c3020b1f055ab228deaaa21229e9.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "b735511a0d0028f3a2d3bf0991f1506d.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "c7eff322c9dec4449dae24a3b0e05d96.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      },
+      {
+        "name": "d228023574d9e8de4df6133b2f2143bf.jpg",
+        "size": [
+          4096,
+          2880
+        ]
+      },
+      {
+        "name": "de040f169b2aa8b1e4edf3b939c2cf0f.jpg",
+        "size": [
+          4096,
+          4096
+        ]
+      }
+    ],
+    "bytes": 5272076
+  }
+]

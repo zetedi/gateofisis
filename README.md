@@ -1,6 +1,6 @@
 # The Gate of Isis · Bîgeh
 
-A single-page React + Tailwind CSS presentation of the pylon gate-way of the Temple of Bîgeh
+A React + Tailwind CSS presentation of the pylon gate-way of the Temple of Bîgeh
 (island of Bîgeh, First Cataract, Aswan), designed after the typography of
 
 > Aylward M. Blackman, *The Temple of Bîgeh* (Les Temples immergés de la Nubie),
@@ -8,7 +8,7 @@ A single-page React + Tailwind CSS presentation of the pylon gate-way of the Tem
 
 ## Sourcing rule
 
-Every sentence of prose on the page is quoted verbatim from a published source and is
+Every sentence of historical prose in the **Book** is quoted verbatim from a published source and is
 followed by a citation link. No text was written for the site itself except headings,
 navigation labels, and the short editorial notes marked in italics. The sources are:
 
@@ -36,6 +36,26 @@ npm run build    # production bundle in dist/
 
 Vite 8, React 19, Tailwind CSS 4 (`@tailwindcss/vite`). Fonts: Bodoni Moda (display) and
 Old Standard TT (text) from Google Fonts.
+
+## 3D survey
+
+The main navigation has **The Book** (with the original chapter submenu) and **The Gate · 3D**.
+Open `/gateofisis/#3d` for the complete photographic reconstruction: gate, approach,
+columns, pavement and surrounding stones in one model. Three cleaned supporting
+Polycam captures remain available as references, including the correctly labeled top of the gate.
+
+The Three.js viewer loads only on the 3D page. It supports standard/high detail,
+photographic/stone/mesh surfaces, camera presets, orbit/pan/zoom, keyboard controls,
+fullscreen, model downloads and enlarged field photographs. The book's quotations
+and plates remain unchanged; the 3D page uses editorial survey descriptions.
+The opening camera centers the gate and approach stairs; **Whole site** restores the
+complete surroundings. Larger, darker interface text and stronger display typography
+keep the survey readable on desktop and mobile.
+
+The packed Blender master is `reconstruction/output/Gate-of-Isis.blend`.
+See [reconstruction/README.md](reconstruction/README.md) for methods, fidelity,
+registration limitations, artifact paths and reproducibility. Validate web exports with
+`node reconstruction/scripts/validate_models.mjs`.
 
 ## Deployment
 

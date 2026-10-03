@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Original survey inputs; publish the web derivatives in public/ instead.
+/assets/*.zip

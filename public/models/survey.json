@@ -1,0 +1,111 @@
+{
+  "title": "The Gate of Isis \u00b7 Digital field survey",
+  "photoCount": 1055,
+  "models": [
+    {
+      "id": "complete-site",
+      "title": "The gate and surrounding site",
+      "shortTitle": "The complete site",
+      "subtitle": "One photographic reconstruction",
+      "description": "The gate, approach stairs, pavement, columns and scattered stones together in one photographic model.",
+      "file": "models/complete-site.glb",
+      "highFile": "models/complete-site-high.glb",
+      "poster": "models/complete-site-poster.jpg",
+      "direction": [
+        1,
+        0.85,
+        1
+      ],
+      "front": [
+        0,
+        0.18,
+        1
+      ],
+      "bytes": 24376260,
+      "highBytes": 77843560,
+      "record": "Photogrammetry",
+      "note": "1,054 aligned photographs \u00b7 Gate and surroundings in one model \u00b7 Original texture detail preserved in the Blender master.",
+      "fit": 0.95,
+      "focus": {
+        "target": [0.5, 1.55, 3.0],
+        "radius": 1.65,
+        "direction": [0.8, 0.6, 1.5]
+      }
+    },
+    {
+      "id": "site-b",
+      "title": "Gate and waterside platform",
+      "shortTitle": "Gate source scan",
+      "subtitle": "Cleaned Polycam reference",
+      "description": "The gate, its masonry surfaces and the captured waterside platform.",
+      "file": "models/site-b.glb",
+      "poster": "models/site-b-poster.jpg",
+      "direction": [
+        1,
+        0.6,
+        1.4
+      ],
+      "front": [
+        0,
+        0.12,
+        1
+      ],
+      "bytes": 20648556,
+      "record": "Polycam \u00b7 28 Sep",
+      "note": "Captured stone surfaces and textures. Transient human figures removed; open edges reflect capture coverage.",
+      "cleanup": "See reconstruction/reports/polycam-cleanup.json."
+    },
+    {
+      "id": "site-a",
+      "title": "Columns, pavement and loose stones",
+      "shortTitle": "Surroundings source",
+      "subtitle": "Cleaned Polycam reference",
+      "description": "The columned remains, ground surfaces and loose stone fragments.",
+      "file": "models/site-a.glb",
+      "poster": "models/site-a-poster.jpg",
+      "direction": [
+        1,
+        0.65,
+        1
+      ],
+      "front": [
+        0,
+        0.12,
+        1
+      ],
+      "bytes": 12780236,
+      "record": "Polycam \u00b7 28 Sep",
+      "note": "Captured stone surfaces and textures. Transient human figures removed; open edges reflect capture coverage.",
+      "cleanup": "See reconstruction/reports/polycam-cleanup.json."
+    },
+    {
+      "id": "upper-stairs",
+      "title": "Top of the gate",
+      "shortTitle": "Top of the gate",
+      "subtitle": "Independent top reference",
+      "description": "The separately captured top of the gate. Retained at its original detail; its alignment to the complete site is not yet verified.",
+      "file": "models/upper-stairs.glb",
+      "poster": "models/upper-stairs-poster.jpg",
+      "direction": [
+        1,
+        0.75,
+        1
+      ],
+      "front": [
+        0,
+        0.12,
+        1
+      ],
+      "bytes": 5272076,
+      "record": "Polycam \u00b7 28 Sep",
+      "note": "Top of the gate. Independent reference: insufficient common features for a validated placement in the main model.",
+      "cleanup": "See reconstruction/reports/polycam-cleanup.json."
+    }
+  ],
+  "method": "The gate and surrounding stones were reconstructed together from 1,054 aligned survey photographs. The Blender master retains 12.7 million triangles and eleven 8K photographic texture atlases. Standard and high-detail versions bring the same site to the browser. Cleaned Polycam scans are retained as supporting references.",
+  "limitation": "Open edges and gaps reflect capture coverage. Dimensions have not been checked against survey control. The separately captured top of the gate could not be reliably registered and remains an independent reference; no missing architecture has been invented.",
+  "registeredPhotoCount": 1054,
+  "masterTriangles": 12699647,
+  "masterTextureAtlases": 11,
+  "masterTextureDimension": 8192
+}

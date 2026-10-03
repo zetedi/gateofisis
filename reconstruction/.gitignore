@@ -1,0 +1,10 @@
+.venv/
+work/
+output/
+*.log
+__pycache__/
+reports/*.png
+reports/*.jpg
+reports/photo-inventory.json
+reports/staged-photos.json
+reports/raw-mesh.json

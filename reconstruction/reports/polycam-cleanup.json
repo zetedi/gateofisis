@@ -1,0 +1,35 @@
+[
+  {
+    "scan": "site-b",
+    "removedComponents": [
+      1,
+      2,
+      5,
+      8,
+      9
+    ],
+    "inputFaces": 215428,
+    "removedFaces": 7350,
+    "outputFaces": 208078,
+    "method": "Remove visually identified disconnected transient fragments. No surface interpolation, smoothing or architectural geometry changes."
+  },
+  {
+    "scan": "site-a",
+    "removedComponents": [
+      2,
+      3
+    ],
+    "inputFaces": 205373,
+    "removedFaces": 5008,
+    "outputFaces": 200365,
+    "method": "Remove visually identified disconnected transient fragments. No surface interpolation, smoothing or architectural geometry changes."
+  },
+  {
+    "scan": "upper-stairs",
+    "removedComponents": [],
+    "inputFaces": 101365,
+    "removedFaces": 0,
+    "outputFaces": 101365,
+    "method": "Remove visually identified disconnected transient fragments. No surface interpolation, smoothing or architectural geometry changes."
+  }
+]

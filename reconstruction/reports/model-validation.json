@@ -1,0 +1,56 @@
+[
+  {
+    "file": "models/complete-site.glb",
+    "bytes": 24376260,
+    "triangles": 242998,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "file": "models/complete-site-high.glb",
+    "bytes": 77843560,
+    "triangles": 899999,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "file": "models/site-b.glb",
+    "bytes": 20648556,
+    "triangles": 208078,
+    "errors": 0,
+    "warnings": 0,
+    "messages": []
+  },
+  {
+    "file": "models/site-a.glb",
+    "bytes": 12780236,
+    "triangles": 200365,
+    "errors": 0,
+    "warnings": 0,
+    "messages": [
+      {
+        "code": "IMAGE_NPOT_DIMENSIONS",
+        "message": "Image has non-power-of-two dimensions: 4096x1600.",
+        "severity": 2,
+        "pointer": "/images/1"
+      }
+    ]
+  },
+  {
+    "file": "models/upper-stairs.glb",
+    "bytes": 5272076,
+    "triangles": 101365,
+    "errors": 0,
+    "warnings": 0,
+    "messages": [
+      {
+        "code": "IMAGE_NPOT_DIMENSIONS",
+        "message": "Image has non-power-of-two dimensions: 4096x2880.",
+        "severity": 2,
+        "pointer": "/images/0"
+      }
+    ]
+  }
+]

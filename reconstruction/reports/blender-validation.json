@@ -1,0 +1,15 @@
+{
+  "mainScene": "Gate and surroundings \u00b7 photographic reconstruction",
+  "mainTriangles": 12699647,
+  "packedImages": 17,
+  "fullResolutionAtlases": 11,
+  "scenes": [
+    "Gate and surroundings \u00b7 photographic reconstruction",
+    "Reference \u00b7 site-a \u2014 registered",
+    "Reference \u00b7 site-b \u2014 registered",
+    "Reference \u00b7 Top of gate \u2014 unregistered"
+  ],
+  "missingExternalImages": [],
+  "uvLayerIssues": [],
+  "bytes": 1373046039
+}

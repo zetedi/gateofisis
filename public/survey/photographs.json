@@ -1,0 +1,38 @@
+[
+  {
+    "id": "gate",
+    "title": "The gate and the approach steps",
+    "date": "24 September 2026",
+    "source": "24.09.2026/All/IMG_20260924_135822.jpg",
+    "sha256": "4d3befc727b2f2484d25820285ebe11520b6027141c1557a8b4658e607c21267",
+    "image": "survey/gate.jpg",
+    "thumbnail": "survey/gate-thumb.jpg"
+  },
+  {
+    "id": "reliefs",
+    "title": "Carved surfaces of the gate",
+    "date": "24 September 2026",
+    "source": "24.09.2026/All/IMG_20260924_143539.jpg",
+    "sha256": "340c4755fae265e0c4b424df18299e0d81b7fb39bc0249c571cfcfee94d68287",
+    "image": "survey/reliefs.jpg",
+    "thumbnail": "survey/reliefs-thumb.jpg"
+  },
+  {
+    "id": "stones",
+    "title": "Loose stones beside the columns",
+    "date": "19 September 2026",
+    "source": "19.09.2026/All/IMG_20260919_103459.jpg",
+    "sha256": "53b5da75c888049a7f7052b3f4fbac3d68a636f9e80839847e22bad5002c0e04",
+    "image": "survey/stones.jpg",
+    "thumbnail": "survey/stones-thumb.jpg"
+  },
+  {
+    "id": "columns",
+    "title": "The surviving column capitals",
+    "date": "24 September 2026",
+    "source": "24.09.2026/All/IMG_20260924_150352.jpg",
+    "sha256": "fccc018eb22a4129b3f84af1c3fc6770e73c2b71c7f9aa0dd5fc931562d561f6",
+    "image": "survey/columns.jpg",
+    "thumbnail": "survey/columns-thumb.jpg"
+  }
+]

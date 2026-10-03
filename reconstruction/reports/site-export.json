@@ -1,0 +1,14 @@
+[
+  {
+    "file": "complete-site-high.glb",
+    "triangles": 899999,
+    "textureDimension": 4096,
+    "bytes": 77843560
+  },
+  {
+    "file": "complete-site.glb",
+    "triangles": 242998,
+    "textureDimension": 2048,
+    "bytes": 24376260
+  }
+]
