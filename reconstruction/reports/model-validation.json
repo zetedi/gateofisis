@@ -16,6 +16,195 @@
     "messages": []
   },
   {
+    "file": "models/detail/gate-detail.gltf",
+    "bytes": 17556,
+    "triangles": 5049392,
+    "errors": 0,
+    "warnings": 11,
+    "messages": [
+      {
+        "code": "UNSUPPORTED_EXTENSION",
+        "message": "Cannot validate an extension as it is not supported by the validator: 'KHR_draco_mesh_compression'.",
+        "severity": 2,
+        "pointer": "/extensionsUsed/0"
+      },
+      {
+        "code": "UNSUPPORTED_EXTENSION",
+        "message": "Cannot validate an extension as it is not supported by the validator: 'KHR_texture_basisu'.",
+        "severity": 2,
+        "pointer": "/extensionsUsed/1"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/0/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/1/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/2/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/3/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/4/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/5/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/6/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/7/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/8/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/9/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/10/mimeType"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/0"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/1"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/2"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/3"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/4"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/5"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/6"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/7"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/8"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/9"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/10"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/11"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/12"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/13"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/14"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/15"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/16"
+      }
+    ]
+  },
+  {
     "file": "models/site-b.glb",
     "bytes": 20648556,
     "triangles": 208078,

@@ -1,0 +1,19 @@
+{
+  "nativeGateTriangles": 4749393,
+  "contextTriangles": 299999,
+  "textureDimension": 8192,
+  "textureAtlases": 11,
+  "geometry": "Original gate vertices and UVs retained; context decimated. Draco position quantization: 20 bits.",
+  "gateRegion": {
+    "x": [
+      -0.6,
+      1.65
+    ],
+    "y": [
+      -4.2,
+      -1.8
+    ]
+  },
+  "textureCompression": "KTX2 ETC1S, quality 255, original 8192 px, sRGB mipmaps",
+  "totalBytes": 169461632
+}

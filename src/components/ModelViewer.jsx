@@ -3,27 +3,41 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import Icon from './Icons.jsx'
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
+import { KTX2Loader } from 'three/addons/loaders/KTX2Loader.js'
+import { useLocale } from '../Locale.jsx'
 
 const assetUrl = (file) => `${import.meta.env.BASE_URL}${file}`
 
 function disposeModel(root) {
-  const geometries = new Set(), materials = new Set(), textures = new Set()
+  const geometries = new Set(),
+    materials = new Set(),
+    textures = new Set()
   root.traverse((object) => {
     if (object.geometry) geometries.add(object.geometry)
-    const all = [...(Array.isArray(object.material) ? object.material : [object.material]), ...(object.userData.viewerMaterials || [])]
+    const all = [
+      ...(Array.isArray(object.material) ? object.material : [object.material]),
+      ...(object.userData.viewerMaterials || []),
+    ]
     all.filter(Boolean).forEach((material) => {
       materials.add(material)
-      Object.values(material).forEach((value) => { if (value?.isTexture) textures.add(value) })
+      Object.values(material).forEach((value) => {
+        if (value?.isTexture) textures.add(value)
+      })
     })
   })
   geometries.forEach((g) => g.dispose())
   materials.forEach((m) => m.dispose())
-  textures.forEach((t) => { t.dispose(); t.source?.data?.close?.() })
+  textures.forEach((t) => {
+    t.dispose()
+    t.source?.data?.close?.()
+  })
 }
 
 async function fetchModel(url, signal, onProgress) {
   const response = await fetch(url, { signal })
-  if (!response.ok) throw new Error(`Model download failed (${response.status})`)
+  if (!response.ok)
+    throw new Error(`Model download failed (${response.status})`)
   const total = Number(response.headers.get('content-length'))
   if (!response.body) return response.arrayBuffer()
   const reader = response.body.getReader()
@@ -34,15 +48,28 @@ async function fetchModel(url, signal, onProgress) {
     if (done) break
     chunks.push(value)
     received += value.length
-    onProgress(total ? Math.min(95, Math.round(received / total * 95)) : null)
+    onProgress(total ? Math.min(95, Math.round((received / total) * 95)) : null)
   }
   const bytes = new Uint8Array(received)
   let position = 0
-  chunks.forEach((chunk) => { bytes.set(chunk, position); position += chunk.length })
+  chunks.forEach((chunk) => {
+    bytes.set(chunk, position)
+    position += chunk.length
+  })
   return bytes.buffer
 }
 
-export default function ModelViewer({ model, mode, view, rotating, onRotateChange, onStats, onViewChange }) {
+export default function ModelViewer({
+  model,
+  mode,
+  view,
+  rotating,
+  onRotateChange,
+  onStats,
+  onViewChange,
+}) {
+  const { t } = useLocale()
+  const labels = useRef(t)
   const host = useRef(null)
   const frame = useRef(null)
   const api = useRef(null)
@@ -54,25 +81,43 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
   const [retry, setRetry] = useState(0)
   const [fullscreen, setFullscreen] = useState(false)
   useLayoutEffect(() => {
+    labels.current = t
     callbacks.current = { onStats, onRotateChange, onViewChange }
     preferences.current = { mode, view, rotating }
-  }, [onStats, onRotateChange, onViewChange, mode, view, rotating])
+  }, [onStats, onRotateChange, onViewChange, mode, view, rotating, t])
 
   useEffect(() => {
     const container = host.current
     const abort = new AbortController()
-    let destroyed = false, modelRoot, renderer, animation, dirty = true, visible = true, transition
-    let extent = 10, fitDistance = 20, lastTime = 0
+    let destroyed = false,
+      modelRoot,
+      renderer,
+      animation,
+      dirty = true,
+      visible = true,
+      transition
+    let extent = 10,
+      fitDistance = 20,
+      lastTime = 0
     const center = new THREE.Vector3()
     const scene = new THREE.Scene()
     const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 1000)
     camera.position.set(12, 8, 16)
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' })
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+      })
     } catch {
       // GPU support is only knowable when creating the renderer, after mounting.
       // oxlint-disable-next-line react/set-state-in-effect
-      setError('Interactive 3D is unavailable in this browser. You can still explore the survey photographs below or download the model.')
+      setError(
+        labels.current(
+          'Interactive 3D is unavailable in this browser. Explore the photographs below or download the model.',
+          'العرض التفاعلي غير متاح في هذا المتصفح. يمكنك استكشاف الصور أدناه أو تنزيل النموذج.',
+        ),
+      )
       setLoading(false)
       return () => abort.abort()
     }
@@ -80,7 +125,10 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.setClearColor(0x000000, 0)
     renderer.domElement.tabIndex = 0
-    renderer.domElement.setAttribute('aria-label', `${model.title}. Drag to orbit, scroll to zoom. Arrow keys rotate, plus and minus zoom, R resets the view.`)
+    renderer.domElement.setAttribute(
+      'aria-label',
+      `${model.title}. ${labels.current('Drag to orbit, scroll to zoom. Arrow keys rotate, plus and minus zoom, R resets the view.', 'اسحب للدوران ومرّر للتكبير. الأسهم للدوران، + و − للتكبير والتصغير، و R لإعادة العرض.')}`,
+    )
     renderer.domElement.setAttribute('role', 'img')
     container.appendChild(renderer.domElement)
     const controls = new OrbitControls(camera, renderer.domElement)
@@ -90,7 +138,9 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
     controls.autoRotateSpeed = 0.6
     controls.maxPolarAngle = Math.PI * 0.55
     controls.minPolarAngle = 0.02
-    controls.addEventListener('change', () => { dirty = true })
+    controls.addEventListener('change', () => {
+      dirty = true
+    })
     controls.addEventListener('start', () => {
       transition = null
       callbacks.current.onRotateChange(false)
@@ -106,7 +156,11 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
 
     function setMode(next) {
       modelRoot?.traverse((object) => {
-        if (object.isMesh) object.material = object.userData.viewerMaterials[{ texture: 0, stone: 1, mesh: 2 }[next] ?? 0]
+        if (object.isMesh)
+          object.material =
+            object.userData.viewerMaterials[
+              { texture: 0, stone: 1, mesh: 2 }[next] ?? 0
+            ]
       })
       dirty = true
       if (modelRoot && document.hidden) renderer.render(scene, camera)
@@ -114,24 +168,62 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
     function viewpoint(name, instant = false) {
       if (name === 'free') return
       const focused = model.focus && !['site', 'top'].includes(name)
-      const target = focused ? new THREE.Vector3(...model.focus.target) : center.clone()
-      const distance = focused ? model.focus.radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) / Math.min(camera.aspect, 1) : fitDistance
-      const directions = { overview: model.focus?.direction || model.direction || [1, 0.65, 1.2], site: model.direction || [1, 0.65, 1.2], front: model.front || [0, 0.12, 1], back: (model.front || [0, 0.12, 1]).map((v, i) => i === 1 ? v : -v), top: [0.001, 1, 0.001] }
-      const direction = new THREE.Vector3(...(directions[name] || directions.overview)).normalize()
-      const targetPosition = target.clone().addScaledVector(direction, distance * (name === 'top' ? 1.05 : 1))
-      if (instant || document.hidden || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const target = focused
+        ? new THREE.Vector3(...model.focus.target)
+        : center.clone()
+      if (name === 'detail' || name === 'inscriptions') target.y += 0.45
+      const distance = focused
+        ? (['detail', 'inscriptions'].includes(name)
+            ? 1.05
+            : model.focus.radius) /
+          Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) /
+          Math.min(camera.aspect, 1)
+        : fitDistance
+      const directions = {
+        inscriptions: [0, 0.08, -1],
+        detail: [0, 0.08, 1],
+        overview: model.focus?.direction || model.direction || [1, 0.65, 1.2],
+        site: model.direction || [1, 0.65, 1.2],
+        front: model.front || [0, 0.12, 1],
+        back: (model.front || [0, 0.12, 1]).map((v, i) => (i === 1 ? v : -v)),
+        top: [0.001, 1, 0.001],
+      }
+      const direction = new THREE.Vector3(
+        ...(directions[name] || directions.overview),
+      ).normalize()
+      const targetPosition = target
+        .clone()
+        .addScaledVector(direction, distance * (name === 'top' ? 1.05 : 1))
+      if (
+        instant ||
+        document.hidden ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
         camera.position.copy(targetPosition)
         controls.target.copy(target)
         controls.update()
         dirty = true
         // Paint the opening frame even when Safari pauses the background animation loop.
         if (modelRoot) renderer.render(scene, camera)
-      } else transition = { time: performance.now(), position: camera.position.clone(), target: controls.target.clone(), destination: targetPosition, destinationTarget: target }
+      } else
+        transition = {
+          time: performance.now(),
+          position: camera.position.clone(),
+          target: controls.target.clone(),
+          destination: targetPosition,
+          destinationTarget: target,
+        }
     }
     function zoom(factor) {
       transition = null
       const offset = camera.position.clone().sub(controls.target)
-      offset.setLength(THREE.MathUtils.clamp(offset.length() * factor, controls.minDistance, controls.maxDistance))
+      offset.setLength(
+        THREE.MathUtils.clamp(
+          offset.length() * factor,
+          controls.minDistance,
+          controls.maxDistance,
+        ),
+      )
       camera.position.copy(controls.target).add(offset)
       controls.update()
       dirty = true
@@ -143,14 +235,22 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
       camera.updateProjectionMatrix()
       renderer.setSize(width, height)
       const fov = THREE.MathUtils.degToRad(camera.fov)
-      fitDistance = extent / (2 * Math.sin(fov / 2)) / Math.min(camera.aspect, 1) * (model.fit ?? 0.76)
-      if (modelRoot && preferences.current.view !== 'free') viewpoint(preferences.current.view, true)
+      fitDistance =
+        (extent / (2 * Math.sin(fov / 2)) / Math.min(camera.aspect, 1)) *
+        (model.fit ?? 0.76)
+      if (modelRoot && preferences.current.view !== 'free')
+        viewpoint(preferences.current.view, true)
       dirty = true
     })
     resize.observe(container)
-    const intersection = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; dirty = true })
+    const intersection = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      dirty = true
+    })
     intersection.observe(container)
-    const visibilityChanged = () => { dirty = true }
+    const visibilityChanged = () => {
+      dirty = true
+    }
     document.addEventListener('visibilitychange', visibilityChanged)
     function animate(time) {
       animation = requestAnimationFrame(animate)
@@ -161,23 +261,50 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
       if (transition) {
         const t = Math.min((time - transition.time) / 750, 1)
         const eased = 1 - (1 - t) ** 3
-        camera.position.lerpVectors(transition.position, transition.destination, eased)
-        controls.target.lerpVectors(transition.target, transition.destinationTarget, eased)
+        camera.position.lerpVectors(
+          transition.position,
+          transition.destination,
+          eased,
+        )
+        controls.target.lerpVectors(
+          transition.target,
+          transition.destinationTarget,
+          eased,
+        )
         dirty = true
         if (t === 1) transition = null
       }
       controls.update(delta)
-      if (dirty || controls.autoRotate) { renderer.render(scene, camera); dirty = false }
+      if (dirty || controls.autoRotate) {
+        renderer.render(scene, camera)
+        dirty = false
+      }
     }
     animation = requestAnimationFrame(animate)
     function keydown(event) {
-      if (['+', '=', '-', '_', 'r', 'R', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) event.preventDefault()
+      if (
+        [
+          '+',
+          '=',
+          '-',
+          '_',
+          'r',
+          'R',
+          'ArrowLeft',
+          'ArrowRight',
+          'ArrowUp',
+          'ArrowDown',
+        ].includes(event.key)
+      )
+        event.preventDefault()
       else return
       callbacks.current.onRotateChange(false)
       if (['+', '='].includes(event.key)) zoom(0.82)
       else if (['-', '_'].includes(event.key)) zoom(1.22)
-      else if (event.key.toLowerCase() === 'r') { viewpoint('overview'); callbacks.current.onViewChange('overview') }
-      else {
+      else if (event.key.toLowerCase() === 'r') {
+        viewpoint('overview')
+        callbacks.current.onViewChange('overview')
+      } else {
         transition = null
         const offset = camera.position.clone().sub(controls.target)
         const spherical = new THREE.Spherical().setFromVector3(offset)
@@ -185,31 +312,85 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
         if (event.key === 'ArrowRight') spherical.theta += 0.12
         if (event.key === 'ArrowUp') spherical.phi -= 0.12
         if (event.key === 'ArrowDown') spherical.phi += 0.12
-        spherical.phi = THREE.MathUtils.clamp(spherical.phi, controls.minPolarAngle, controls.maxPolarAngle)
-        camera.position.copy(controls.target).add(new THREE.Vector3().setFromSpherical(spherical))
-        controls.update(); dirty = true
+        spherical.phi = THREE.MathUtils.clamp(
+          spherical.phi,
+          controls.minPolarAngle,
+          controls.maxPolarAngle,
+        )
+        camera.position
+          .copy(controls.target)
+          .add(new THREE.Vector3().setFromSpherical(spherical))
+        controls.update()
+        dirty = true
         callbacks.current.onViewChange('free')
       }
     }
     renderer.domElement.addEventListener('keydown', keydown)
     api.current = { setMode, viewpoint, zoom }
 
-    fetchModel(assetUrl(model.file), abort.signal, (value) => { if (!destroyed) setProgress(value) })
-      .then((bytes) => new GLTFLoader().parseAsync(bytes, assetUrl('models/')))
+    const manager = new THREE.LoadingManager()
+    const separate = model.file.endsWith('.gltf')
+    manager.onProgress = (_url, loaded, total) => {
+      if (separate && !destroyed)
+        setProgress(Math.min(95, Math.round((loaded / total) * 95)))
+    }
+    const draco = new DRACOLoader(manager)
+      .setDecoderPath(assetUrl('draco/'))
+      .setWorkerLimit(2)
+    const ktx2 = new KTX2Loader(manager)
+      .setTranscoderPath(assetUrl('basis/'))
+      .setWorkerLimit(2)
+      .detectSupport(renderer)
+    const loader = new GLTFLoader(manager)
+      .setDRACOLoader(draco)
+      .setKTX2Loader(ktx2)
+    fetchModel(assetUrl(model.file), abort.signal, (value) => {
+      if (!destroyed && !separate) setProgress(value)
+    })
+      .then((bytes) =>
+        loader.parseAsync(
+          bytes,
+          assetUrl(model.file.slice(0, model.file.lastIndexOf('/') + 1)),
+        ),
+      )
       .then((gltf) => {
-        if (destroyed) { disposeModel(gltf.scene); return }
+        if (destroyed) {
+          disposeModel(gltf.scene)
+          return
+        }
         modelRoot = gltf.scene
         let triangles = 0
         modelRoot.traverse((object) => {
           if (!object.isMesh) return
-          const original = Array.isArray(object.material) ? object.material[0] : object.material
+          const original = Array.isArray(object.material)
+            ? object.material[0]
+            : object.material
           const map = original.map
-          if (map) map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy())
-          const texture = new THREE.MeshBasicMaterial({ map, color: map ? 0xffffff : 0xbca987, side: THREE.DoubleSide })
-          const stone = new THREE.MeshStandardMaterial({ color: 0xbcb4a5, roughness: 0.94, metalness: 0, side: THREE.DoubleSide })
-          const mesh = new THREE.MeshBasicMaterial({ color: 0x536c5f, wireframe: true, side: THREE.DoubleSide })
+          if (map)
+            map.anisotropy = Math.min(
+              16,
+              renderer.capabilities.getMaxAnisotropy(),
+            )
+          const texture = new THREE.MeshBasicMaterial({
+            map,
+            color: map ? 0xffffff : 0xbca987,
+            side: THREE.DoubleSide,
+          })
+          const stone = new THREE.MeshStandardMaterial({
+            color: 0xbcb4a5,
+            roughness: 0.94,
+            metalness: 0,
+            side: THREE.DoubleSide,
+          })
+          const mesh = new THREE.MeshBasicMaterial({
+            color: 0x536c5f,
+            wireframe: true,
+            side: THREE.DoubleSide,
+          })
           object.userData.viewerMaterials = [texture, stone, mesh, original]
-          triangles += (object.geometry.index?.count || object.geometry.attributes.position.count) / 3
+          triangles +=
+            (object.geometry.index?.count ||
+              object.geometry.attributes.position.count) / 3
         })
         scene.add(modelRoot)
         const bounds = new THREE.Box3().setFromObject(modelRoot)
@@ -221,16 +402,26 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
         camera.updateProjectionMatrix()
         controls.minDistance = extent * 0.025
         controls.maxDistance = extent * 5
-        fitDistance = extent / (2 * Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) / Math.min(camera.aspect, 1) * (model.fit ?? 0.76)
+        fitDistance =
+          (extent /
+            (2 * Math.sin(THREE.MathUtils.degToRad(camera.fov / 2))) /
+            Math.min(camera.aspect, 1)) *
+          (model.fit ?? 0.76)
         setMode(preferences.current.mode)
         viewpoint(preferences.current.view, true)
         callbacks.current.onStats({ triangles: Math.round(triangles) })
-        setProgress(100); setLoading(false)
+        setProgress(100)
+        setLoading(false)
         dirty = true
       })
       .catch((failure) => {
         if (!destroyed && failure.name !== 'AbortError') {
-          setError('The model could not be opened. Check your connection and try again, or explore the photographs below.')
+          setError(
+            labels.current(
+              'The model could not be opened. Check your connection and try again, or explore the photographs below.',
+              'تعذّر فتح النموذج. تحقّق من اتصالك وحاول مجددًا، أو استكشف الصور أدناه.',
+            ),
+          )
           setLoading(false)
         }
       })
@@ -238,48 +429,179 @@ export default function ModelViewer({ model, mode, view, rotating, onRotateChang
       destroyed = true
       abort.abort()
       cancelAnimationFrame(animation)
-      resize.disconnect(); intersection.disconnect()
+      resize.disconnect()
+      intersection.disconnect()
       document.removeEventListener('visibilitychange', visibilityChanged)
       controls.dispose()
       renderer.domElement.removeEventListener('keydown', keydown)
       if (modelRoot) disposeModel(modelRoot)
+      draco.dispose()
+      ktx2.dispose()
       renderer.dispose()
       renderer.domElement.remove()
       api.current = null
     }
   }, [model, retry])
 
-  useEffect(() => { api.current?.setMode(mode) }, [mode])
-  useEffect(() => { api.current?.viewpoint(view) }, [view])
   useEffect(() => {
-    const changed = () => setFullscreen(document.fullscreenElement === frame.current)
+    api.current?.setMode(mode)
+  }, [mode])
+  useEffect(() => {
+    api.current?.viewpoint(view)
+  }, [view])
+  useEffect(() => {
+    const changed = () =>
+      setFullscreen(document.fullscreenElement === frame.current)
     document.addEventListener('fullscreenchange', changed)
     return () => document.removeEventListener('fullscreenchange', changed)
   }, [])
   const toggleFullscreen = async () => {
     if (document.fullscreenElement) await document.exitFullscreen?.()
-    else if (frame.current.requestFullscreen) await frame.current.requestFullscreen()
+    else if (frame.current.requestFullscreen)
+      await frame.current.requestFullscreen()
     else setFullscreen(!fullscreen)
   }
 
-  return <div className={`model-viewport ${fullscreen ? 'is-fullscreen' : ''}`} ref={frame}>
-    <div className="viewport-label"><span className="status-dot" /> INTERACTIVE SURVEY <span className="viewport-label-separator">/</span> {model.shortTitle}</div>
-    <div ref={host} className="webgl-host" />
-    {(loading || error) && <div className="viewer-loading" aria-live="polite">
-      {model.poster && <img className="viewer-poster" src={assetUrl(model.poster)} alt="" />}
-      <div className="loading-card">
-        {error ? <><Icon name="info" /><p>{error}</p><button onClick={() => { setLoading(true); setProgress(0); setError(''); setRetry((n) => n + 1) }}>Try again <Icon name="reset" size={16} /></button></> : <><span className="loading-orbit"><Icon name="cube" size={28} /></span><p>Bringing the stones into view</p><span className="loading-detail">{progress === null ? 'Loading the survey' : `${progress}% · ${progress >= 95 ? 'Preparing the model' : 'Loading the survey'}`}</span><div className="loading-track"><i style={{ width: `${progress ?? 10}%` }} /></div></>}
+  return (
+    <div
+      className={`model-viewport ${fullscreen ? 'is-fullscreen' : ''}`}
+      ref={frame}
+    >
+      <div className="viewport-label">
+        <span className="status-dot" />{' '}
+        {t('INTERACTIVE SURVEY', 'المسح التفاعلي')}{' '}
+        <span className="viewport-label-separator">/</span> {model.shortTitle}
       </div>
-    </div>}
-    <div className="viewer-tools" aria-label="3D view controls">
-      <button title="Zoom in" aria-label="Zoom in" disabled={loading || !!error} onClick={() => api.current?.zoom(0.8)}><Icon name="plus" /></button>
-      <button title="Zoom out" aria-label="Zoom out" disabled={loading || !!error} onClick={() => api.current?.zoom(1.25)}><Icon name="minus" /></button>
-      <span />
-      <button title="Reset view" aria-label="Reset view" disabled={loading || !!error} onClick={() => { api.current?.viewpoint('overview'); onViewChange('overview'); onRotateChange(false) }}><Icon name="reset" /></button>
-      <button title={rotating ? 'Pause rotation' : 'Rotate automatically'} aria-label={rotating ? 'Pause rotation' : 'Rotate automatically'} aria-pressed={rotating} disabled={loading || !!error} onClick={() => onRotateChange(!rotating)}><Icon name={rotating ? 'pause' : 'orbit'} /></button>
-      <span />
-      <button title={fullscreen ? 'Exit fullscreen' : 'Enter fullscreen'} aria-label={fullscreen ? 'Exit fullscreen' : 'Enter fullscreen'} onClick={() => toggleFullscreen().catch(() => setFullscreen(!fullscreen))}><Icon name={fullscreen ? 'close' : 'expand'} /></button>
+      <div ref={host} className="webgl-host" />
+      {(loading || error) && (
+        <div className="viewer-loading" aria-live="polite">
+          {model.poster && (
+            <img
+              className="viewer-poster"
+              src={assetUrl(model.poster)}
+              alt=""
+            />
+          )}
+          <div className="loading-card">
+            {error ? (
+              <>
+                <Icon name="info" />
+                <p>{error}</p>
+                <button
+                  onClick={() => {
+                    setLoading(true)
+                    setProgress(0)
+                    setError('')
+                    setRetry((n) => n + 1)
+                  }}
+                >
+                  {t('Try again', 'حاول مجددًا')}{' '}
+                  <Icon name="reset" size={16} />
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="loading-orbit">
+                  <Icon name="cube" size={28} />
+                </span>
+                <p>
+                  {t(
+                    'Bringing the stones into view',
+                    'جارٍ إظهار تفاصيل الحجر',
+                  )}
+                </p>
+                <span className="loading-detail">
+                  {progress === null
+                    ? t('Loading the survey', 'جارٍ تحميل المسح')
+                    : `${progress}% · ${progress >= 95 ? t('Preparing the model', 'جارٍ إعداد النموذج') : t('Loading the survey', 'جارٍ تحميل المسح')}`}
+                </span>
+                <div className="loading-track">
+                  <i style={{ width: `${progress ?? 10}%` }} />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      <div
+        className="viewer-tools"
+        aria-label={t('3D view controls', 'أدوات العرض ثلاثي الأبعاد')}
+      >
+        <button
+          title={t('Zoom in', 'تكبير')}
+          aria-label={t('Zoom in', 'تكبير')}
+          disabled={loading || !!error}
+          onClick={() => api.current?.zoom(0.8)}
+        >
+          <Icon name="plus" />
+        </button>
+        <button
+          title={t('Zoom out', 'تصغير')}
+          aria-label={t('Zoom out', 'تصغير')}
+          disabled={loading || !!error}
+          onClick={() => api.current?.zoom(1.25)}
+        >
+          <Icon name="minus" />
+        </button>
+        <span />
+        <button
+          title={t('Reset view', 'إعادة العرض')}
+          aria-label={t('Reset view', 'إعادة العرض')}
+          disabled={loading || !!error}
+          onClick={() => {
+            api.current?.viewpoint('overview')
+            onViewChange('overview')
+            onRotateChange(false)
+          }}
+        >
+          <Icon name="reset" />
+        </button>
+        <button
+          title={
+            rotating
+              ? t('Pause rotation', 'إيقاف الدوران')
+              : t('Rotate automatically', 'دوران تلقائي')
+          }
+          aria-label={
+            rotating
+              ? t('Pause rotation', 'إيقاف الدوران')
+              : t('Rotate automatically', 'دوران تلقائي')
+          }
+          aria-pressed={rotating}
+          disabled={loading || !!error}
+          onClick={() => onRotateChange(!rotating)}
+        >
+          <Icon name={rotating ? 'pause' : 'orbit'} />
+        </button>
+        <span />
+        <button
+          title={
+            fullscreen
+              ? t('Exit fullscreen', 'إنهاء ملء الشاشة')
+              : t('Enter fullscreen', 'ملء الشاشة')
+          }
+          aria-label={
+            fullscreen
+              ? t('Exit fullscreen', 'إنهاء ملء الشاشة')
+              : t('Enter fullscreen', 'ملء الشاشة')
+          }
+          onClick={() =>
+            toggleFullscreen().catch(() => setFullscreen(!fullscreen))
+          }
+        >
+          <Icon name={fullscreen ? 'close' : 'expand'} />
+        </button>
+      </div>
+      <div className="viewport-bottom">
+        <span>
+          <i className="drag-symbol" /> {t('Drag to orbit', 'اسحب للدوران')}{' '}
+          <b>·</b> {t('Scroll to zoom', 'مرّر للتكبير')} <b>·</b>{' '}
+          {t('Right-drag to pan', 'اسحب بالزر الأيمن للتحريك')}
+        </span>
+        <span className="view-coordinate">
+          X <i /> Y <i /> Z
+        </span>
+      </div>
     </div>
-    <div className="viewport-bottom"><span><i className="drag-symbol" /> Drag to orbit <b>·</b> Scroll to zoom <b>·</b> Right-drag to pan</span><span className="view-coordinate">X <i /> Y <i /> Z</span></div>
-  </div>
+  )
 }

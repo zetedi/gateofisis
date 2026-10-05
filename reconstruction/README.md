@@ -34,7 +34,7 @@ No surveyed control distances, ground-control points, or independent scale check
 
 ## Reproduction
 
-Use Python with `numpy scipy pillow rawpy opencv-python-headless`, Blender 5.1, and Swift/RealityKit on a supported Mac. Run from the repository root. Source images are never uploaded.
+Use Python with `numpy scipy pillow rawpy opencv-python-headless`, Blender 5.1, and Swift/RealityKit on a supported Mac. Run from the repository root. Reconstruction runs locally. Eight selected original field photographs are published on the site for inspection; the supplied frontal photograph was also used with the image-generation tool for the separate illustrative hero sketch.
 
 1. `reports/photo-inventory.json` records SHA-256 deduplication and source paths. `scripts/prepare_photos.py` stages the unique images and develops RAWs.
 2. Compile `scripts/reconstruct.swift` with `swiftc -parse-as-library`; run it with the staged photo folder and an output folder. Checkpoints, camera poses, the sparse cloud, and USDZ outputs are retained in `output/photogrammetry`.
@@ -45,3 +45,32 @@ Use Python with `numpy scipy pillow rawpy opencv-python-headless`, Blender 5.1, 
 7. `node reconstruction/scripts/validate_models.mjs` runs the Khronos glTF validator on the published models. `npm run lint` and `npm run build` check the website.
 
 Relevant primary documentation: [Apple Object Capture](https://developer.apple.com/documentation/realitykit/photogrammetrysession), [Blender USD](https://docs.blender.org/manual/en/latest/files/import_export/usd.html), [Khronos glTF Validator](https://github.com/KhronosGroup/glTF-Validator).
+
+## Original detail in the browser · October 2026
+
+`export_detail.py` reads the existing full-resolution Blender master, retains the
+gate-region geometry and UVs (4,749,393 triangles), and reduces only the surrounding
+context to 299,999 triangles. Both remain in their original common coordinate frame.
+The exported glTF has 5,049,392 triangles. Draco uses 20-bit position and 18-bit UV
+quantization; this is a compressed web derivative, not a new reconstruction.
+
+`compress_detail.py` encodes all eleven original 8192 × 8192 atlases as KTX2 ETC1S
+at quality 255, with sRGB mipmaps, using Basis Universal 2.50. This preserves atlas
+resolution but is lossy texture compression. No carving, glyph or stone was generated
+or sharpened artificially. The separate glTF, geometry buffer and textures total
+169,461,632 bytes in `public/models/detail/`. The packed Blender master still keeps
+the complete site at 12.7 million triangles and the original textures.
+
+The optional Original detail view avoids forcing a 169 MB download on every visitor.
+The Inscriptions camera faces the decorated reverse side; four dedicated full-resolution
+field photos offer original-pixel inspection of the jambs, ceiling and inner wall.
+
+Khronos validation reports no errors. The installed validator does not implement
+KHR_texture_basisu or KHR_draco_mesh_compression and emits eleven MIME warnings for
+image/ktx2. These are retained in the report, not suppressed. Additional checks verify
+all KTX2 signatures, native atlas dimensions, texture references and triangle counts.
+The complete model was decoded and visually inspected in Safari.
+
+Primary references: [Three.js GLTFLoader](https://threejs.org/docs/pages/GLTFLoader.html),
+[KTX2Loader](https://threejs.org/docs/pages/KTX2Loader.html),
+[Basis Universal](https://github.com/BinomialLLC/basis_universal).

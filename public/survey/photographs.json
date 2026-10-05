@@ -6,7 +6,9 @@
     "source": "24.09.2026/All/IMG_20260924_135822.jpg",
     "sha256": "4d3befc727b2f2484d25820285ebe11520b6027141c1557a8b4658e607c21267",
     "image": "survey/gate.jpg",
-    "thumbnail": "survey/gate-thumb.jpg"
+    "thumbnail": "survey/gate-thumb.jpg",
+    "titleAr": "البوابة ودرجات المدخل",
+    "dateAr": "٢٤ سبتمبر ٢٠٢٦"
   },
   {
     "id": "reliefs",
@@ -15,7 +17,9 @@
     "source": "24.09.2026/All/IMG_20260924_143539.jpg",
     "sha256": "340c4755fae265e0c4b424df18299e0d81b7fb39bc0249c571cfcfee94d68287",
     "image": "survey/reliefs.jpg",
-    "thumbnail": "survey/reliefs-thumb.jpg"
+    "thumbnail": "survey/reliefs-thumb.jpg",
+    "titleAr": "الأسطح المنقوشة للبوابة",
+    "dateAr": "٢٤ سبتمبر ٢٠٢٦"
   },
   {
     "id": "stones",
@@ -24,7 +28,9 @@
     "source": "19.09.2026/All/IMG_20260919_103459.jpg",
     "sha256": "53b5da75c888049a7f7052b3f4fbac3d68a636f9e80839847e22bad5002c0e04",
     "image": "survey/stones.jpg",
-    "thumbnail": "survey/stones-thumb.jpg"
+    "thumbnail": "survey/stones-thumb.jpg",
+    "titleAr": "أحجار متناثرة بجوار الأعمدة",
+    "dateAr": "١٩ سبتمبر ٢٠٢٦"
   },
   {
     "id": "columns",
@@ -33,6 +39,64 @@
     "source": "24.09.2026/All/IMG_20260924_150352.jpg",
     "sha256": "fccc018eb22a4129b3f84af1c3fc6770e73c2b71c7f9aa0dd5fc931562d561f6",
     "image": "survey/columns.jpg",
-    "thumbnail": "survey/columns-thumb.jpg"
+    "thumbnail": "survey/columns-thumb.jpg",
+    "titleAr": "تيجان الأعمدة الباقية",
+    "dateAr": "٢٤ سبتمبر ٢٠٢٦"
+  },
+  {
+    "id": "inscription-143536",
+    "title": "Hieroglyphs on the outer jamb",
+    "titleAr": "النقوش الهيروغليفية على القائمة الخارجية",
+    "date": "24 September 2026",
+    "dateAr": "٢٤ سبتمبر ٢٠٢٦",
+    "source": "24.09.2026/All/IMG_20260924_143536.jpg",
+    "sha256": "0334f00d34fa63136743afc1d4c495984365999fc29071447d31a65cd05d5d5e",
+    "image": "survey/inscription-143536.jpg",
+    "thumbnail": "survey/inscription-143536-thumb.jpg",
+    "inscription": true,
+    "width": 2736,
+    "height": 3648
+  },
+  {
+    "id": "inscription-144241",
+    "title": "The carved ceiling and lintel",
+    "titleAr": "نقوش السقف والعتبة",
+    "date": "24 September 2026",
+    "dateAr": "٢٤ سبتمبر ٢٠٢٦",
+    "source": "24.09.2026/All/IMG_20260924_144241.jpg",
+    "sha256": "b498b6a872a513524fbb2291cce6683dc07953cf2ba2519e261514ca8258e261",
+    "image": "survey/inscription-144241.jpg",
+    "thumbnail": "survey/inscription-144241-thumb.jpg",
+    "inscription": true,
+    "width": 2736,
+    "height": 3648
+  },
+  {
+    "id": "inscription-144302",
+    "title": "The inner wall of the gateway",
+    "titleAr": "الجدار الداخلي للبوابة",
+    "date": "24 September 2026",
+    "dateAr": "٢٤ سبتمبر ٢٠٢٦",
+    "source": "24.09.2026/All/IMG_20260924_144302.jpg",
+    "sha256": "174e2e757265df4510a93cde389a4a8321a00310b5dcd8ede637a973c8763c14",
+    "image": "survey/inscription-144302.jpg",
+    "thumbnail": "survey/inscription-144302-thumb.jpg",
+    "inscription": true,
+    "width": 2736,
+    "height": 3648
+  },
+  {
+    "id": "inscription-144428",
+    "title": "Relief figures on the outer face",
+    "titleAr": "مناظر بارزة على الوجه الخارجي",
+    "date": "24 September 2026",
+    "dateAr": "٢٤ سبتمبر ٢٠٢٦",
+    "source": "24.09.2026/All/IMG_20260924_144428.jpg",
+    "sha256": "25c6090445eac92694cdf35ba7d660f2072174be937947b17560d2c7c8e45a80",
+    "image": "survey/inscription-144428.jpg",
+    "thumbnail": "survey/inscription-144428-thumb.jpg",
+    "inscription": true,
+    "width": 2736,
+    "height": 3648
   }
 ]

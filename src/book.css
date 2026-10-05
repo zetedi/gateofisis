@@ -1,0 +1,534 @@
+.book-page {
+  background: var(--museum-paper);
+  color: var(--museum-ink);
+}
+.book-hero {
+  padding: 65px 24px 66px;
+  text-align: center;
+  border-bottom: 1px solid var(--museum-line);
+  scroll-margin-top: 100px;
+}
+.book-hero .eyebrow {
+  justify-content: center;
+  color: #526453;
+}
+.book-hero h1 {
+  font: 500 clamp(46px, 5vw, 76px) / 1.2 var(--font-display);
+  font-variation-settings: 'opsz' 24;
+  letter-spacing: -2px;
+  margin: 17px 0 8px;
+}
+.book-hero-intro {
+  font: 17px/1.6 var(--museum-sans);
+  color: #526453;
+}
+.gate-sketch {
+  display: block;
+  height: clamp(380px, 53vw, 610px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  margin: 20px auto 12px;
+  mix-blend-mode: multiply;
+}
+.hero-quotation {
+  font: 500 clamp(23px, 2.3vw, 32px) / 1.55 var(--font-display);
+  font-variation-settings: 'opsz' 24;
+  max-width: 850px;
+  margin: 18px auto;
+}
+.hero-citation {
+  font: 11px/1.6 var(--museum-sans);
+  letter-spacing: 1.6px;
+  color: #526453;
+}
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin-top: 30px;
+  font: 15px/1.5 var(--museum-sans);
+}
+.hero-actions a {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  border-bottom: 1px solid #9ea997;
+  padding: 10px 0;
+}
+.book-layout {
+  direction: ltr;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 820px);
+  gap: clamp(30px, 6vw, 100px);
+  max-width: 1260px;
+  margin: auto;
+  padding: 60px 35px 65px;
+  align-items: start;
+}
+.book-contents {
+  position: sticky;
+  top: 140px;
+  padding-top: 12px;
+  font-family: var(--museum-sans);
+}
+.book-contents nav {
+  margin-top: 22px;
+}
+.book-contents a {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 13px 12px;
+  border-bottom: 1px solid var(--museum-line);
+  border-left: 2px solid transparent;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #526453;
+}
+.book-contents a span {
+  font-size: 11px;
+  color: #65725c;
+}
+.book-contents a[aria-current] {
+  background: #e8ece2;
+  color: #243e34;
+  border-left-color: #466b53;
+}
+.contents-note {
+  white-space: pre-line;
+  font: italic 15px/1.8 var(--font-body);
+  color: #526453;
+  margin: 28px 12px;
+}
+.reader-section {
+  min-width: 0;
+  scroll-margin-top: 126px;
+}
+.reader-toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font: 11px/1.6 var(--museum-sans);
+  letter-spacing: 1.2px;
+  color: #526453;
+  margin-bottom: 14px;
+}
+.reader-paper {
+  height: 1120px;
+  padding: 32px 58px 25px;
+  background: #fcfaf3;
+  border: 1px solid #d2d5c8;
+  box-shadow: 0 8px 28px #263b3108;
+  display: flex;
+  flex-direction: column;
+}
+.reader-running-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  border-bottom: 1px solid var(--museum-line);
+  padding-bottom: 16px;
+  margin-bottom: 35px;
+  font: 10px/1.5 var(--museum-sans);
+  letter-spacing: 1.1px;
+  color: #526453;
+}
+.reader-viewport {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.reader-flow {
+  height: 100%;
+  width: 100%;
+  column-count: auto;
+  column-fill: auto;
+  column-gap: 96px;
+  font:
+    17px/1.8 Georgia,
+    'Times New Roman',
+    serif;
+  color: #33473b;
+  overflow-wrap: break-word;
+}
+.reader-flow p {
+  margin: 0 0 19px;
+  orphans: 3;
+  widows: 3;
+}
+.reader-flow h2,
+.reader-flow h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-variation-settings: 'opsz' 24;
+  line-height: 1.3;
+  break-after: avoid;
+}
+.reader-flow h2 {
+  font-size: 34px;
+}
+.reader-flow h3 {
+  font-size: 25px;
+  margin: 27px 0 14px;
+}
+.reader-flow h4 {
+  font: 500 15px/1.6 var(--museum-sans);
+  margin: 24px 0 9px;
+  break-after: avoid;
+}
+.reader-chapter-heading {
+  border-bottom: 1px solid var(--museum-line);
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+  break-inside: avoid;
+}
+.reader-chapter-heading p {
+  font: 14px/1.7 var(--museum-sans);
+  color: #526453;
+  margin: 13px 0 0;
+}
+.reader-flow blockquote {
+  margin: 22px 0;
+  border-inline-start: 2px solid #b8c0ab;
+  padding-inline-start: 20px;
+  orphans: 3;
+  widows: 3;
+}
+.reader-flow section {
+  margin-bottom: 26px;
+}
+.reader-cite {
+  display: inline-block;
+  font: 12px/1.6 var(--museum-sans);
+  color: #526453;
+  border-bottom: 1px solid #b6c1ad;
+  margin-bottom: 15px;
+}
+.reader-flow .reader-small,
+.reader-footnotes {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #526453;
+}
+.reader-footnotes {
+  border-top: 1px solid var(--museum-line);
+  padding-top: 16px;
+}
+.reader-signature {
+  text-align: end;
+}
+.reader-flow .reader-subtitle {
+  font: 14px/1.7 var(--museum-sans);
+  color: #526453;
+}
+.reader-figure {
+  break-inside: avoid;
+  margin: 26px 0;
+}
+.reader-figure button {
+  display: block;
+  width: 100%;
+}
+.reader-figure img {
+  width: 100%;
+  height: auto;
+  max-height: 470px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.reader-figure.compact img {
+  max-height: 330px;
+}
+.reader-figure figcaption {
+  font: 13px/1.6 var(--museum-sans);
+  color: #526453;
+  margin-top: 14px;
+}
+.reader-figure figcaption span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+.reader-legend {
+  margin: 15px 0;
+}
+.reader-legend > div {
+  display: flex;
+  gap: 16px;
+  border-bottom: 1px solid var(--museum-line);
+  padding: 5px 0;
+  font-size: 15px;
+  break-inside: avoid;
+}
+.reader-legend dt {
+  width: 15px;
+  flex-shrink: 0;
+}
+.reader-greek {
+  width: 100%;
+  font-size: 14px;
+  margin: 20px 0;
+  break-inside: avoid;
+}
+.reader-greek td {
+  padding: 4px 10px 4px 0;
+}
+.reader-title-page {
+  text-align: center;
+}
+.reader-title-page h2 {
+  font-size: 32px;
+  margin: 20px 0;
+}
+.reader-title-page h3 {
+  font-size: 30px;
+  margin: 30px 0;
+}
+.reader-title-page .reader-small {
+  margin-bottom: 6px;
+}
+.reader-rule {
+  width: 50px;
+  border-top: 1px solid #89967e;
+  margin: 28px auto;
+}
+.reader-title-page .reader-kicker {
+  font: 13px/1.7 var(--museum-sans);
+  letter-spacing: 1px;
+}
+.reader-imprint {
+  margin: 54px 0 28px;
+}
+.reader-imprint p {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+.reader-folio {
+  text-align: center;
+  font: 12px/1 var(--museum-sans);
+  padding-top: 25px;
+  color: #526453;
+}
+.reader-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  font: 14px/1.5 var(--museum-sans);
+  margin-top: 20px;
+}
+.reader-pagination button {
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #acb8a0;
+}
+.reader-pagination button:disabled {
+  cursor: default;
+}
+.reader-pagination > span {
+  font-size: 12px;
+  color: #526453;
+}
+.book-page > .survey-footer {
+  margin: 0 5%;
+  border-top: 1px solid var(--museum-line);
+}
+html[dir='rtl'] .book-reader,
+html[dir='rtl'] .book-contents {
+  direction: rtl;
+}
+html[dir='rtl'] .reader-flow {
+  font-family: 'Noto Naskh Arabic', serif;
+  font-size: 20px;
+  line-height: 1.95;
+}
+html[dir='rtl']
+  :is(.reader-flow h2, .reader-flow h3, .book-hero h1, .hero-quotation) {
+  font-family: 'Noto Naskh Arabic', serif;
+  letter-spacing: 0;
+}
+html[dir='rtl'] .reader-flow .reader-small {
+  font-size: 16px;
+}
+html[dir='rtl'] .reader-flow h4 {
+  font-size: 17px;
+}
+html[dir='rtl'] .hero-quotation {
+  font-size: 30px;
+  line-height: 1.9;
+}
+@media (max-width: 1050px) {
+  .book-layout {
+    grid-template-columns: 190px minmax(0, 1fr);
+    padding-inline: 24px;
+    gap: 28px;
+  }
+  .reader-paper {
+    padding-inline: 32px;
+    height: 1060px;
+  }
+}
+@media (max-width: 760px) {
+  .book-hero {
+    padding: 40px 22px 42px;
+  }
+  .book-hero h1 {
+    letter-spacing: -1px;
+  }
+  .book-hero-intro {
+    font-size: 15px;
+    max-width: 320px;
+    margin: auto;
+  }
+  .hero-actions {
+    gap: 22px;
+    font-size: 13px;
+  }
+  .hero-actions a {
+    gap: 10px;
+  }
+  .book-layout {
+    display: block;
+    padding: 30px 16px 45px;
+  }
+  .book-contents {
+    position: static;
+    margin-bottom: 28px;
+  }
+  .book-contents nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 12px;
+  }
+  .book-contents a {
+    padding: 10px;
+    font-size: 13px;
+    gap: 10px;
+  }
+  .contents-note {
+    display: none;
+  }
+  .reader-paper {
+    height: 760px;
+    padding: 23px 25px 19px;
+  }
+  .reader-running-head {
+    margin-bottom: 25px;
+    font-size: 9px;
+  }
+  .reader-flow {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+  .reader-flow h2 {
+    font-size: 29px;
+  }
+  .reader-flow h3 {
+    font-size: 23px;
+  }
+  .reader-figure img {
+    max-height: 390px;
+  }
+  .reader-figure.compact img {
+    max-height: 280px;
+  }
+  .reader-title-page h2 {
+    font-size: 27px;
+  }
+  .reader-title-page h3 {
+    font-size: 25px;
+  }
+  .reader-imprint {
+    margin-top: 28px;
+  }
+  .reader-toolbar {
+    font-size: 10px;
+  }
+  .hero-citation {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+  html[dir='rtl'] .reader-flow {
+    font-size: 19px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+.plate-dialog {
+  margin: auto;
+  width: min(1150px, 94vw);
+  max-height: 94dvh;
+  padding: 0;
+  background: #f5f3ed;
+  color: #243e34;
+  border: 1px solid #a1af95;
+}
+.plate-dialog::backdrop {
+  background: #10271fe6;
+  backdrop-filter: blur(7px);
+}
+.plate-dialog-body {
+  display: flex;
+  flex-direction: column;
+  max-height: 93dvh;
+  padding: 20px 28px;
+}
+.plate-dialog header,
+.plate-dialog footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  font: 14px/1.6 var(--museum-sans);
+}
+.plate-dialog header {
+  padding-bottom: 15px;
+}
+.plate-dialog button {
+  padding: 7px;
+}
+.plate-dialog-image {
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.plate-dialog img {
+  max-height: 70dvh;
+  max-width: 100%;
+  object-fit: contain;
+}
+.plate-dialog p {
+  font: 15px/1.5 var(--museum-sans);
+  padding: 16px 0;
+  text-align: center;
+}
+.plate-dialog footer {
+  border-top: 1px solid var(--museum-line);
+  padding-top: 10px;
+}
+
+.landing-page .book-hero {
+  border-bottom: 0;
+}
+
+.gate-sketch {
+  mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 6%, #000 93%, transparent);
+  mask-composite: intersect;
+}
+.reader-viewport {
+  position: relative;
+}
+.reader-flow {
+  position: absolute;
+  inset: 0;
+}

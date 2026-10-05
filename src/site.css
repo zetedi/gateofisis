@@ -275,3 +275,38 @@ button:disabled { opacity: .4; cursor: wait; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
+.language-switch { display:flex; align-items:center; gap:8px; direction:ltr; font:13px/1.5 var(--museum-sans); color:#687661; }
+.language-switch button { padding:9px 4px; border-bottom:1px solid transparent; }
+.language-switch button[aria-pressed=true] { color:#243e34; border-bottom-color:#65775f; font-weight:600; }
+html[dir=rtl] { --font-display:'Noto Naskh Arabic',serif; --font-body:'Noto Naskh Arabic',serif; --museum-sans:Tahoma,Arial,sans-serif; }
+html[dir=rtl] :is(.eyebrow,.control-label,.edition-number,.viewport-label,.workspace-heading) { letter-spacing:0; }
+html[dir=rtl] .survey-models button,html[dir=rtl] .survey-photo { text-align:right; }
+html[dir=rtl] .survey-sidebar { border-right:0; border-left:1px solid var(--museum-line); }
+html[dir=rtl] .survey-intro h1 { letter-spacing:0; line-height:1.5; }
+html[dir=rtl] .site-brand small { letter-spacing:0; font-size:11px; }
+html[dir=rtl] .survey-models svg,html[dir=rtl] .photo-caption svg,html[dir=rtl] .book-crosslink a { margin-left:0; margin-right:auto; }
+@media(max-width:760px) { .site-header { flex-wrap:wrap; height:104px; padding-block:12px; gap:8px; } .site-brand { flex:1; } .language-switch { order:2; font-size:12px; } .primary-navigation { order:3; height:35px; width:100%; justify-content:center; gap:30px; } .chapter-dropdown { right:auto; left:-20px; } .reader-section { scroll-margin-top:120px; } }
+.detail-quality { padding:12px 20px; display:flex; align-items:center; justify-content:flex-end; gap:14px; border-bottom:1px solid var(--museum-line); background:#edf0e5; font:13px/1.5 var(--museum-sans); }
+.detail-quality label { font-size:11px; letter-spacing:1px; }
+.detail-quality select { color:#243e34; border:1px solid #a7b499; background:#f8f7ef; padding:8px 30px 8px 12px; border-radius:0; max-width:100%; }
+.survey-workspace,.field-photographs { scroll-margin-top:120px; }
+.detail-invitation { max-width:1600px; margin:22px auto 48px; padding:24px 28px; border:1px solid var(--museum-line); display:flex; align-items:center; justify-content:space-between; gap:30px; background:#edf0e5; }
+.detail-invitation h2 { font:500 26px/1.4 var(--font-display); }
+.detail-invitation p { font-size:14px; line-height:1.7; color:#526453; margin-top:8px; max-width:690px; }
+.detail-invitation button { flex-shrink:0; display:flex; align-items:center; gap:12px; border-bottom:1px solid #8a9d7b; padding:12px 0; font-size:14px; }
+.field-heading>p { max-width:330px; }
+.photo-inspector { width:min(740px,66vw); height:78dvh; overflow:auto; background:#203126; align-self:stretch; }
+.survey-dialog-inner>.photo-inspector { padding:0; }
+.photo-inspector img { width:100%; height:100%; object-fit:contain; max-width:none; max-height:none; }
+.photo-inspector.is-zoomed img { width:auto; height:auto; display:block; }
+.survey-dialog-inner>.photo-information { width:300px; padding:60px 26px 28px; }
+.photo-zoom { display:flex; align-items:center; gap:8px; margin:20px 0 12px; padding:10px 0; border-bottom:1px solid #8c9c7c; font:14px/1.5 var(--museum-sans); }
+.photo-original { display:inline-block; font:13px/1.6 var(--museum-sans); border-bottom:1px solid #a7b499; margin-top:18px; }
+@media(max-width:900px) { .detail-invitation { display:block; } .detail-invitation button { margin-top:12px; } }
+@media(max-width:760px) { .detail-quality { padding:10px 12px; justify-content:space-between; gap:8px; } .detail-quality select { font-size:12px; } .detail-invitation { padding:20px; } .photo-inspector { width:100%; height:54dvh; flex-shrink:0; } .survey-dialog-inner>.photo-information { width:100%; padding:20px; } .photo-information .photo-source { margin-top:14px; } .photo-information .eyebrow { display:none; } .survey-dialog-inner h3 { font-size:22px; margin:0 0 8px; } .photo-zoom { margin-top:12px; } .field-heading>p { max-width:100%; } }
+body { background:var(--museum-paper); }
+.author-credit { display:flex; align-items:baseline; justify-content:flex-end; gap:9px; flex-wrap:wrap; direction:ltr; padding:18px 5% 30px; color:#526453; background:var(--museum-paper); font:14px/1.7 var(--museum-sans); }
+.author-credit>span:first-child { font-size:10px; letter-spacing:1.3px; text-transform:uppercase; margin-right:7px; }
+.author-credit bdi { color:#243e34; }
+.survey-dialog-inner>.photo-inspector { width:min(740px,66vw); align-self:stretch; flex-shrink:0; }
+@media(max-width:760px) { .survey-dialog-inner>.photo-inspector { width:100%; } }

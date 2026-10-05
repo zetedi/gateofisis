@@ -1,427 +1,619 @@
-import { useCallback, useState } from 'react'
 import {
-  AFTERWARD,
-  CONTEXT,
-  DOOR_INSCRIPTIONS,
-  FURTHER_READING,
-  GATE_SCENES,
-  GRAFFITI,
-  INTRODUCTION,
-  NAV,
-  PLAN,
-  PLATES,
-  PREFACE,
-  PYLON_TOWERS,
-  SOURCES,
-  TITLE_PAGE,
-} from './content.js'
-import { Cite, Ornament, PlateFigure, Quote, Rule, RunningHead, SectionTitle, Sheet } from './components/ui.jsx'
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
+import * as english from './content.js'
+import * as arabic from './content.ar.js'
+import { useLocale } from './Locale.jsx'
 import Lightbox from './components/Lightbox.jsx'
+import Icon from './components/Icons.jsx'
+import './book.css'
 
-const plateById = (id) => PLATES.find((p) => p.id === id)
+const chapterFromHash = () =>
+  english.NAV.some(([id]) => `#${id}` === window.location.hash)
+    ? window.location.hash.slice(1)
+    : 'title'
 
-function Nav() {
-  return (
-    <nav className="book-subnav" aria-label="Book contents">
-        <span>CONTENTS</span>
-        <ul>
-          {NAV.map(([id, label]) => (
-            <li key={id}>
-              <a href={`#${id}`}>
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-    </nav>
+function Chapter({ id, content: c, onOpen }) {
+  const { t } = useLocale()
+  const cite = (source, page) => (
+    <a
+      className="reader-cite"
+      href={c.SOURCES[source].url}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {c.SOURCES[source].short}
+      {page && ` · ${page}`}
+    </a>
   )
-}
-
-function Cover() {
-  return (
-    <header className="leather relative overflow-hidden text-paper-100">
-      <div className="mx-auto max-w-5xl px-6 pb-20 pt-24 text-center sm:pt-32">
-        <p className="caps-wide text-xs text-paper-300">{TITLE_PAGE.series}</p>
-        <Rule className="bg-gilt/60" />
-        <p className="caps text-xs text-paper-300">{TITLE_PAGE.les}</p>
-        <h1 className="font-display caps mt-3 text-3xl leading-tight text-vermilion sm:text-5xl">
-          {TITLE_PAGE.seriesTitle}
-        </h1>
-        <Ornament className="text-gilt" />
-        <p className="font-display caps text-2xl text-paper-50 sm:text-4xl">The Gate of Isis</p>
-        <p className="smallcaps mt-3 text-base text-paper-300">
-          The Pylon Gate-way of the Temple of Bîgeh, First Cataract, Aswan
-        </p>
-        <p className="caps mt-10 text-[0.65rem] text-paper-300">
-          Presented from the record of Aylward M. Blackman (1915) and published sources
-        </p>
-        <a
-          href="#title"
-          className="caps mt-12 inline-block border border-gilt/60 px-6 py-2 text-xs text-gilt transition hover:bg-gilt/10"
-        >
-          Open the volume
-        </a>
-      </div>
-      <div className="absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-black/40 to-transparent sm:w-20" aria-hidden="true" />
+  const heading = (title, sub) => (
+    <header className="reader-chapter-heading">
+      <h2>{title}</h2>
+      {sub && <p>{sub}</p>}
     </header>
   )
-}
-
-function TitlePage() {
-  return (
-    <Sheet id="title" tone="paper-dark" className="text-center">
-      <p className="caps text-xs text-ink-700">{TITLE_PAGE.series}</p>
-      <Rule />
-      <p className="caps text-xs text-ink-700">{TITLE_PAGE.les}</p>
-      <h2 className="font-display caps mt-2 text-2xl text-vermilion sm:text-4xl">{TITLE_PAGE.seriesTitle}</h2>
-      <Ornament />
-      <p className="font-display caps text-xl text-ink-900 sm:text-3xl">{TITLE_PAGE.title}</p>
-      <p className="caps mt-4 text-xs text-ink-700">{TITLE_PAGE.by}</p>
-      <p className="mt-6 font-display caps text-sm text-ink-900">{TITLE_PAGE.authorLine}</p>
-      {TITLE_PAGE.authorTitles.map((t) => (
-        <p key={t} className="smallcaps text-sm text-ink-700">
-          {t}
-        </p>
-      ))}
-      <div className="mt-14 space-y-1">
-        <p className="caps text-sm text-ink-900">{TITLE_PAGE.place}</p>
-        <p className="caps text-xs text-ink-700">{TITLE_PAGE.press}</p>
-        <Rule />
-        <p className="caps text-sm text-ink-900">{TITLE_PAGE.year}</p>
-      </div>
-      <p className="mt-10 text-xs italic text-ink-500">
-        Transcribed from the title page. Scan:{' '}
-        <a className="underline hover:text-vermilion-dark" href={SOURCES.blackman.url} target="_blank" rel="noreferrer">
-          Internet Archive
-        </a>
-        .
-      </p>
-    </Sheet>
+  const paragraphs = (items) => items.map((text, i) => <p key={i}>{text}</p>)
+  const quote = (text, source, page) => (
+    <>
+      <blockquote>« {text} »</blockquote>
+      {cite(source, page)}
+    </>
   )
-}
-
-function Preface() {
-  return (
-    <Sheet id="preface">
-      <SectionTitle>Preface.</SectionTitle>
-      {PREFACE.paragraphs.map((p) => (
-        <p key={p} className="dropcap text-[1.05rem] leading-relaxed">
-          {p}
-        </p>
-      ))}
-      <p className="smallcaps mt-6 text-right">{PREFACE.signature}</p>
-      <p className="mt-2 text-sm">{PREFACE.dateline}</p>
-      <p className="mt-6 text-right">
-        <Cite source={PREFACE.source} page={PREFACE.page} />
-      </p>
-    </Sheet>
+  const figure = (plate, compact = false) => (
+    <figure
+      className={`reader-figure ${compact ? 'compact' : ''}`}
+      key={plate.id}
+    >
+      <button
+        onClick={() => onOpen(plate)}
+        aria-label={`${t('Enlarge plate', 'تكبير اللوحة')} ${plate.num}`}
+      >
+        <img
+          src={`${import.meta.env.BASE_URL}plates/${plate.id}.jpg`}
+          alt={plate.caption}
+        />
+      </button>
+      <figcaption>
+        <span>
+          {t('PLATE', 'اللوحة')} {plate.num}
+        </span>
+        {plate.caption}
+      </figcaption>
+    </figure>
   )
-}
-
-function Introduction({ onOpen }) {
-  return (
-    <Sheet id="introduction">
-      <RunningHead left="The Temple of Bîgeh." right="Part I." />
-      <SectionTitle sub="Introduction and Text.">Part I.</SectionTitle>
-      <div className="space-y-5 text-[1.05rem] leading-relaxed">
-        <p className="dropcap">{INTRODUCTION.paragraphs[0]}</p>
-        <p>
-          {INTRODUCTION.paragraphs[1]}
-          <sup className="fn"> (1)</sup>
-        </p>
-      </div>
-
-      <div className="my-8 grid gap-6 sm:grid-cols-2">
-        <PlateFigure plate={plateById('plate-03-1')} onOpen={onOpen} />
-        <PlateFigure plate={plateById('plate-03-2')} onOpen={onOpen} />
-      </div>
-
-      <div className="space-y-5 text-[1.05rem] leading-relaxed">
-        <p>
-          {INTRODUCTION.paragraphs[2]}
-          <sup className="fn"> (2) (3)</sup>
-        </p>
-        <p>{INTRODUCTION.paragraphs[3]}</p>
-        <p>{INTRODUCTION.paragraphs[4]}</p>
-        <p>{INTRODUCTION.paragraphs[5]}</p>
-      </div>
-
-      <div className="mt-8 border-t border-ink-300/50 pt-3">
-        {INTRODUCTION.footnotes.map((f, i) => (
-          <p key={f} className="footnote">
-            <sup className="fn">({i + 1})</sup> {f}
-          </p>
-        ))}
-        <p className="mt-3">
-          <Cite source={INTRODUCTION.source} page={INTRODUCTION.page} />
-        </p>
-      </div>
-    </Sheet>
-  )
-}
-
-function Plan({ onOpen }) {
-  const plate = { id: 'plate-01-plan', num: 'I', caption: PLAN.caption }
-  return (
-    <Sheet id="plan">
-      <RunningHead left="Bîgeh." right="Plate I" />
-      <SectionTitle sub="Ground-plan of the Temple.">Plate I.</SectionTitle>
-      <div className="grid items-start gap-8 sm:grid-cols-5">
-        <div className="sm:col-span-3">
-          <PlateFigure plate={plate} onOpen={onOpen} />
-        </div>
-        <dl className="sm:col-span-2">
-          {PLAN.legend.map(([k, v]) => (
-            <div key={k} className="flex gap-3 border-b border-ink-300/40 py-2 text-sm">
-              <dt className="w-5 font-display italic text-vermilion-dark">{k}.</dt>
-              <dd>— {v}</dd>
-            </div>
-          ))}
-          <p className="mt-3 text-xs italic text-ink-500">{PLAN.scale}</p>
-          <p className="mt-4">
-            <Cite source={PLAN.source} page={PLAN.plate} />
-          </p>
-        </dl>
-      </div>
-    </Sheet>
-  )
-}
-
-function SceneBlock({ scene, onOpen, flip }) {
-  const plate = plateById(scene.image)
-  return (
-    <article className="scroll-mt-24 py-8" id={scene.id}>
-      <h3 className="font-display caps text-center text-lg text-ink-900">{scene.heading}</h3>
-      <p className="smallcaps text-center text-sm text-ink-700">{scene.sub}</p>
-      <p className="text-center text-xs text-ink-500">({scene.plate}.)</p>
-      <div className={`mt-6 grid gap-8 md:grid-cols-5 ${flip ? 'md:[&>*:first-child]:order-2' : ''}`}>
-        <div className="md:col-span-2">
-          <PlateFigure plate={plate} onOpen={onOpen} />
-        </div>
-        <div className="md:col-span-3">
-          <p className="text-[1.02rem] leading-relaxed">{scene.scene}</p>
-          <p className="smallcaps mt-5 text-sm text-ink-700">Text.</p>
-          <ol className="mt-1 space-y-3">
-            {scene.texts.map((t, i) => (
-              <li key={t.text} className="text-[1.02rem] leading-relaxed">
-                <span className="font-display italic text-vermilion-dark">{String.fromCharCode(97 + i)}.</span>{' '}
-                <span className="text-ink-700">{t.who} :</span> «&nbsp;{t.text}&nbsp;»
-              </li>
-            ))}
-          </ol>
-          <p className="smallcaps mt-5 text-sm text-ink-700">Archaeological details :</p>
-          <p className="mt-1 text-[0.95rem] leading-relaxed text-ink-700">{scene.details}</p>
-          <p className="mt-4">
-            <Cite source={scene.source} page={scene.page} />
-          </p>
-        </div>
-      </div>
-    </article>
-  )
-}
-
-function Gate({ onOpen }) {
-  return (
-    <Sheet id="gate">
-      <RunningHead left="East face of the pylon gate-way." right="The Pylon." />
-      <SectionTitle sub="The scenes and inscriptions of the gate-way, in Blackman’s translation.">The Pylon.</SectionTitle>
-      <div className="divide-y divide-ink-300/40">
-        {GATE_SCENES.map((s, i) => (
-          <SceneBlock key={s.id} scene={s} onOpen={onOpen} flip={i % 2 === 1} />
-        ))}
-      </div>
-
-      <Ornament className="mt-4" />
-      <h3 className="font-display caps text-center text-lg">{PYLON_TOWERS.north.heading}</h3>
-      <p className="text-center text-xs text-ink-500">({PYLON_TOWERS.north.plate}.)</p>
-      <p className="mt-4 text-[1.02rem] leading-relaxed">{PYLON_TOWERS.north.text}</p>
-      <Quote source={PYLON_TOWERS.source} page={PYLON_TOWERS.page}>
-        «&nbsp;{PYLON_TOWERS.north.inscription}&nbsp;»
-      </Quote>
-      <p className="text-[1.02rem] leading-relaxed">
-        Immediately below the above scene is a much destroyed horizontal line of inscription : «&nbsp;
-        {PYLON_TOWERS.north.fragment}&nbsp;»
-      </p>
-      <h3 className="font-display caps mt-10 text-center text-lg">{PYLON_TOWERS.south.heading}</h3>
-      <p className="text-center text-xs text-ink-500">({PYLON_TOWERS.south.plate}.)</p>
-      <p className="mt-4 text-[1.02rem] leading-relaxed">{PYLON_TOWERS.south.text}</p>
-      <p className="mt-4">
-        <Cite source={PYLON_TOWERS.source} page={PYLON_TOWERS.page} />
-      </p>
-    </Sheet>
-  )
-}
-
-function Doors({ onOpen }) {
-  const d = DOOR_INSCRIPTIONS
-  return (
-    <Sheet id="doors">
-      <RunningHead left="The entrance to the outer hall : west face." right="The Doors." />
-      <SectionTitle sub="Inscriptions on the jambs of the entrance to the outer hall.">The Doors of the Horizon.</SectionTitle>
-      <p className="text-[1.02rem] leading-relaxed">{d.intro}</p>
-      <Quote source={d.source} page="p. 46">«&nbsp;{d.north}&nbsp;»</Quote>
-      <div className="my-8 grid gap-6 sm:grid-cols-2">
-        <PlateFigure plate={plateById('plate-38')} onOpen={onOpen} />
-        <PlateFigure plate={plateById('plate-40')} onOpen={onOpen} />
-      </div>
-      <p className="text-[1.02rem] leading-relaxed">
-        Above Osiris in two vertical lines : «&nbsp;{d.osiris}&nbsp;»
-      </p>
-      <Quote source={d.source} page="p. 47">«&nbsp;{d.horus}&nbsp;»</Quote>
-      <p className="text-[1.02rem] leading-relaxed">
-        Below this inscription is a scene representing Horus pouring water out of a vase (Pl. XXXVI, 2). In front of Horus :
-        «&nbsp;{d.horusShort}&nbsp;»
-      </p>
-      <p className="mt-6 text-[1.02rem] leading-relaxed">{d.southIntro}</p>
-      <Quote source={d.source} page="p. 47">«&nbsp;{d.south}&nbsp;»</Quote>
-    </Sheet>
-  )
-}
-
-function Graffiti() {
-  const g = GRAFFITI
-  return (
-    <Sheet id="graffiti">
-      <RunningHead left="The Demotic graffiti of Bîgeh." right="Greek inscription." />
-      <SectionTitle sub="By F. Ll. Griffith.">The Demotic Graffiti of Bîgeh.</SectionTitle>
-      <p className="dropcap text-[1.05rem] leading-relaxed">{g.demotic.text}</p>
-      <p className="mt-5 text-[1.02rem] leading-relaxed">
-        <span className="smallcaps">No. 8.</span> {g.demotic.no8}
-      </p>
-      <p className="mt-3">
-        <Cite source={g.demotic.source} page={g.demotic.page} />
-      </p>
-
-      <Ornament className="mt-10" />
-      <h3 className="font-display caps text-center text-xl">Greek Inscription.</h3>
-      <p className="mt-5 text-[1.02rem] leading-relaxed">{g.greek.intro}</p>
-      <p className="mt-2 text-[1.02rem]">{g.greek.dating}</p>
-      <table className="mx-auto mt-6 text-[1rem]">
-        <tbody>
-          {g.greek.lines.map(([gr, en]) => (
-            <tr key={gr}>
-              <td className="pr-10 font-display tracking-wide">{gr}</td>
-              <td className="italic text-ink-700">{en}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p className="mt-2 text-center text-xs italic text-ink-500">
-        Lines 5–9 of the transcription (patronymics and place-name) are omitted here; see the source.
-      </p>
-      <p className="mt-4 text-right">
-        <Cite source={g.greek.source} page={g.greek.page} />
-      </p>
-    </Sheet>
-  )
-}
-
-function Plates({ onOpen }) {
-  return (
-    <Sheet id="plates" tone="paper-dark">
-      <RunningHead left="Bîgeh." right="Plates." />
-      <SectionTitle sub="Heliogravure plates from the 1915 volume. An asterisk denotes the author’s photographs.">List of Plates.</SectionTitle>
-      <div className="columns-1 gap-6 sm:columns-2 [&>*]:mb-6 [&>*]:break-inside-avoid">
-        {PLATES.map((p) => (
-          <PlateFigure key={p.id} plate={p} onOpen={onOpen} />
-        ))}
-      </div>
-      <p className="mt-4 text-center text-xs italic text-ink-500">
-        Captions quoted from Blackman’s List of Plates, pp. 71–72. <Cite source="blackman" />
-      </p>
-    </Sheet>
-  )
-}
-
-function Context() {
-  return (
-    <Sheet id="context">
-      <RunningHead left="The Abaton." right="Island of Bîgeh." />
-      <SectionTitle sub="What published sources say about the island and its sanctuary.">The Abaton.</SectionTitle>
-      {CONTEXT.map((block) => (
-        <div key={block.source} className="mb-8">
-          {block.quotes.map((q) => (
-            <p key={q} className="mb-3 text-[1.05rem] leading-relaxed">
-              «&nbsp;{q}&nbsp;»
+  const plate = (id, compact) =>
+    figure(
+      c.PLATES.find((p) => p.id === id),
+      compact,
+    )
+  switch (id) {
+    case 'title':
+      return (
+        <div className="reader-title-page">
+          <p className="reader-kicker">{c.TITLE_PAGE.series}</p>
+          <div className="reader-rule" />
+          <p>{c.TITLE_PAGE.les}</p>
+          <h2>{c.TITLE_PAGE.seriesTitle}</h2>
+          <div className="reader-rule" />
+          <h3>{c.TITLE_PAGE.title}</h3>
+          <p>{c.TITLE_PAGE.by}</p>
+          <p>{c.TITLE_PAGE.authorLine}</p>
+          {c.TITLE_PAGE.authorTitles.map((line, i) => (
+            <p className="reader-small" key={i}>
+              {line}
             </p>
           ))}
-          <Cite source={block.source} />
+          <div className="reader-imprint">
+            <p>{c.TITLE_PAGE.place}</p>
+            <p>{c.TITLE_PAGE.press}</p>
+            <p>1915</p>
+          </div>
+          <p className="reader-small">
+            {t('From the original title page.', 'عن صفحة العنوان الأصلية.')}{' '}
+            {cite('blackman')}
+          </p>
         </div>
-      ))}
+      )
+    case 'preface':
+      return (
+        <>
+          {heading(t('Preface', 'تمهيد'))}
+          {paragraphs(c.PREFACE.paragraphs)}
+          <p className="reader-signature">{c.PREFACE.signature}</p>
+          <p>{c.PREFACE.dateline}</p>
+          {cite(c.PREFACE.source, c.PREFACE.page)}
+        </>
+      )
+    case 'introduction':
+      return (
+        <>
+          {heading(
+            t('The Temple of Bîgeh', 'معبد بيجة'),
+            t('Part I · Introduction and text', 'الجزء الأول · المقدمة والنص'),
+          )}
+          {c.INTRODUCTION.paragraphs.map((p, i) => (
+            <p key={i}>
+              {p}
+              {i === 1 && <sup> (1)</sup>}
+              {i === 2 && <sup> (2) (3)</sup>}
+            </p>
+          ))}
+          <div className="reader-footnotes">
+            {c.INTRODUCTION.footnotes.map((f, i) => (
+              <p key={i}>
+                <sup>{i + 1}</sup> {f}
+              </p>
+            ))}
+          </div>
+          {cite(c.INTRODUCTION.source, c.INTRODUCTION.page)}
+          {plate('plate-03-1', true)}
+          {plate('plate-03-2', true)}
+        </>
+      )
+    case 'plan':
+      return (
+        <>
+          {heading(
+            t('Plan of the temple', 'مخطط المعبد'),
+            t('Plate I · Bîgeh', 'اللوحة الأولى · بيجة'),
+          )}
+          {figure(
+            { id: 'plate-01-plan', num: 'I', caption: c.PLAN.caption },
+            true,
+          )}
+          <dl className="reader-legend">
+            {c.PLAN.legend.map(([k, v]) => (
+              <div key={k}>
+                <dt>{k}</dt>
+                <dd>{v}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className="reader-small">{c.PLAN.scale}</p>
+          {cite(c.PLAN.source, c.PLAN.plate)}
+        </>
+      )
+    case 'gate':
+      return (
+        <>
+          {heading(
+            t('The pylon gate', 'بوابة الصرح'),
+            t(
+              'Scenes and inscriptions in Blackman’s translation',
+              'المناظر والنقوش وفق ترجمة بلاكمان',
+            ),
+          )}
+          {c.GATE_SCENES.map((s) => (
+            <section key={s.id}>
+              <h3>{s.heading}</h3>
+              <p className="reader-subtitle">
+                {s.sub} · {s.plate}
+              </p>
+              {plate(s.image, true)}
+              <p>{s.scene}</p>
+              <h4>{t('Text', 'النص')}</h4>
+              {s.texts.map((x, i) => (
+                <p key={i}>
+                  <em>{x.who}:</em> « {x.text} »
+                </p>
+              ))}
+              <h4>{t('Archaeological details', 'تفاصيل أثرية')}</h4>
+              <p>{s.details}</p>
+              {cite(s.source, s.page)}
+            </section>
+          ))}
+          <h3>{c.PYLON_TOWERS.north.heading}</h3>
+          <p className="reader-subtitle">{c.PYLON_TOWERS.north.plate}</p>
+          <p>{c.PYLON_TOWERS.north.text}</p>
+          {quote(
+            c.PYLON_TOWERS.north.inscription,
+            c.PYLON_TOWERS.source,
+            c.PYLON_TOWERS.page,
+          )}
+          <p>
+            {t(
+              'Immediately below is a much-destroyed horizontal inscription:',
+              'أسفل هذا المنظر مباشرة سطر أفقي من نقش شديد التلف:',
+            )}{' '}
+            « {c.PYLON_TOWERS.north.fragment} »
+          </p>
+          <h3>{c.PYLON_TOWERS.south.heading}</h3>
+          <p>{c.PYLON_TOWERS.south.plate}</p>
+          <p>{c.PYLON_TOWERS.south.text}</p>
+          {cite(c.PYLON_TOWERS.source, c.PYLON_TOWERS.page)}
+        </>
+      )
+    case 'doors':
+      return (
+        <>
+          {heading(
+            t('The doors of the horizon', 'أبواب الأفق'),
+            t(
+              'The entrance to the outer hall · West face',
+              'مدخل القاعة الخارجية · الوجه الغربي',
+            ),
+          )}
+          <p>{c.DOOR_INSCRIPTIONS.intro}</p>
+          {quote(
+            c.DOOR_INSCRIPTIONS.north,
+            c.DOOR_INSCRIPTIONS.source,
+            'p. 46',
+          )}
+          {plate('plate-38', true)}
+          {plate('plate-40', true)}
+          <p>
+            {t(
+              'Above Osiris in two vertical lines:',
+              'فوق أوزيريس في سطرين رأسيين:',
+            )}{' '}
+            « {c.DOOR_INSCRIPTIONS.osiris} »
+          </p>
+          {quote(
+            c.DOOR_INSCRIPTIONS.horus,
+            c.DOOR_INSCRIPTIONS.source,
+            'p. 47',
+          )}
+          <p>
+            {t(
+              'Below this inscription, Horus pours water from a vase (Pl. XXXVI, 2). In front of Horus:',
+              'أسفل هذا النقش منظر لحورس يصب الماء من إناء (اللوحة XXXVI، 2). وأمام حورس:',
+            )}{' '}
+            « {c.DOOR_INSCRIPTIONS.horusShort} »
+          </p>
+          <p>{c.DOOR_INSCRIPTIONS.southIntro}</p>
+          {quote(
+            c.DOOR_INSCRIPTIONS.south,
+            c.DOOR_INSCRIPTIONS.source,
+            'p. 47',
+          )}
+        </>
+      )
+    case 'graffiti':
+      return (
+        <>
+          {heading(
+            t('The graffiti of Bîgeh', 'نقوش زوّار بيجة'),
+            t('Demotic · F. Ll. Griffith', 'الديموطيقية · ف. ل. غريفيث'),
+          )}
+          <p>{c.GRAFFITI.demotic.text}</p>
+          <p>
+            <strong>{t('No. 8.', 'رقم ٨.')} </strong>
+            {c.GRAFFITI.demotic.no8}
+          </p>
+          {cite(c.GRAFFITI.demotic.source, c.GRAFFITI.demotic.page)}
+          <h3>{t('Greek inscription', 'النقش اليوناني')}</h3>
+          <p>{c.GRAFFITI.greek.intro}</p>
+          <p>{c.GRAFFITI.greek.dating}</p>
+          <table className="reader-greek">
+            <tbody>
+              {c.GRAFFITI.greek.lines.map(([gr, tr]) => (
+                <tr key={gr}>
+                  <td lang="el" dir="ltr">
+                    {gr}
+                  </td>
+                  <td>{tr}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="reader-small">
+            {t(
+              'Lines 5–9 (patronymics and place-name) are omitted here; see the source.',
+              'حُذفت هنا الأسطر ٥–٩ (أسماء الآباء واسم المكان)؛ راجع المصدر.',
+            )}
+          </p>
+          {cite(c.GRAFFITI.greek.source, c.GRAFFITI.greek.page)}
+        </>
+      )
+    case 'plates':
+      return (
+        <>
+          {heading(
+            t('The plates', 'اللوحات'),
+            t(
+              'Photographic plates from the 1915 volume. An asterisk marks Blackman’s own photographs.',
+              'لوحات مصوّرة من مجلد ١٩١٥. تشير النجمة إلى الصور التي التقطها بلاكمان.',
+            ),
+          )}
+          {c.PLATES.map((p) => figure(p))}
+          <p className="reader-small">
+            {t(
+              'Captions from the List of Plates, pp. 71–72.',
+              'التعليقات من قائمة اللوحات، ص ٧١–٧٢.',
+            )}{' '}
+            {cite('blackman')}
+          </p>
+        </>
+      )
+    case 'context':
+      return (
+        <>
+          {heading(
+            t('The Abaton', 'الأباتون'),
+            t(
+              'The island and its sanctuary in published sources',
+              'الجزيرة وحرمها في المصادر المنشورة',
+            ),
+          )}
+          {c.CONTEXT.map((b, i) => (
+            <section key={i}>
+              {b.quotes.map((q, j) => (
+                <blockquote key={j}>« {q} »</blockquote>
+              ))}
+              {cite(b.source)}
+            </section>
+          ))}
+          <h3>{t('Afterward', 'ما بعد ذلك')}</h3>
+          <p>{c.AFTERWARD.note}</p>
+          {c.AFTERWARD.quotes.map((q, i) => (
+            <blockquote key={i}>« {q} »</blockquote>
+          ))}
+          {cite(c.AFTERWARD.source)}
+        </>
+      )
+    case 'sources':
+      return (
+        <>
+          {heading(t('Sources & editorial notes', 'المصادر وملاحظات التحرير'))}
+          {c.FURTHER_READING.map((id) => (
+            <section key={id}>
+              <h4>{c.SOURCES[id].short}</h4>
+              <p lang="en" dir="ltr">
+                {c.SOURCES[id].citation}
+              </p>
+              {cite(id)}
+              {c.SOURCES[id].note && (
+                <p className="reader-small">{c.SOURCES[id].note}</p>
+              )}
+            </section>
+          ))}
+          <h3>{t('About this edition', 'عن هذه النسخة')}</h3>
+          <p>
+            {t(
+              'The Arabic edition is an editorial translation of the English selections. Gaps, uncertainties and historical wording are retained; the original sources remain the reference.',
+              'النسخة العربية ترجمة تحريرية للمقتطفات الإنجليزية، تحافظ على مواضع النقص والشك والتعبيرات التاريخية؛ وتبقى المصادر الأصلية مرجعًا.',
+            )}
+          </p>
+          <p>
+            {t(
+              'The opening illustration is an AI-generated drawing in a handmade sketch style, based on the field photograph. It is an illustration, separate from the photographic survey.',
+              'الرسم الافتتاحي صورة مولّدة بالذكاء الاصطناعي بأسلوب الرسم اليدوي، مستندة إلى الصورة الميدانية. وهو رسم توضيحي مستقل عن التوثيق الفوتوغرافي.',
+            )}
+          </p>
+          <p className="reader-small">
+            {t(
+              'Blackman’s volume is in the public domain. Wikipedia text is CC BY-SA 4.0.',
+              'مجلد بلاكمان ضمن الملكية العامة. نصوص ويكيبيديا متاحة برخصة CC BY-SA 4.0.',
+            )}
+          </p>
+        </>
+      )
+    default:
+      return null
+  }
+}
 
-      <Ornament />
-      <h3 className="font-display caps text-center text-lg">Afterward.</h3>
-      <p className="mt-4 text-sm italic text-ink-700">{AFTERWARD.note}</p>
-      {AFTERWARD.quotes.map((q) => (
-        <p key={q} className="mt-3 text-[1.05rem] leading-relaxed">
-          «&nbsp;{q}&nbsp;»
-        </p>
-      ))}
-      <p className="mt-3">
-        <Cite source={AFTERWARD.source} />
-      </p>
-    </Sheet>
+function PaginatedReader({ chapter, content, onOpen, onChapter }) {
+  const { locale, t } = useLocale()
+  const viewport = useRef(null)
+  const flow = useRef(null)
+  const [page, setPage] = useState(0)
+  const [metrics, setMetrics] = useState({ count: 1, stride: 0 })
+  const chapterIndex = content.NAV.findIndex(([id]) => id === chapter)
+  useLayoutEffect(() => {
+    let cancelled = false
+    const measure = () => {
+      if (cancelled || !viewport.current || !flow.current) return
+      const width = viewport.current.clientWidth
+      flow.current.style.height = `${viewport.current.clientHeight}px`
+      flow.current.style.columnWidth = `${width}px`
+      const gap = parseFloat(getComputedStyle(flow.current).columnGap)
+      const count = Math.max(
+        1,
+        Math.ceil((flow.current.scrollWidth + gap - 2) / (width + gap)),
+      )
+      setMetrics({ count, stride: width + gap })
+      setPage((p) => Math.min(p, count - 1))
+    }
+    const observer = new ResizeObserver(measure)
+    observer.observe(viewport.current)
+    flow.current.addEventListener('load', measure, true)
+    const element = flow.current
+    document.fonts.ready.then(measure)
+    measure()
+    return () => {
+      cancelled = true
+      observer.disconnect()
+      element.removeEventListener('load', measure, true)
+    }
+  }, [locale, chapter])
+  const turn = (delta) => {
+    const next = page + delta
+    if (next >= 0 && next < metrics.count) {
+      setPage(next)
+      viewport.current
+        .closest('.reader-section')
+        .scrollIntoView({ block: 'start', behavior: 'instant' })
+    } else if (content.NAV[chapterIndex + delta])
+      onChapter(content.NAV[chapterIndex + delta][0])
+  }
+  return (
+    <div
+      className="book-reader"
+      onKeyDown={(e) => {
+        if (e.target.closest('button,a,input')) return
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault()
+          turn((e.key === 'ArrowRight' ? 1 : -1) * (locale === 'ar' ? -1 : 1))
+        }
+      }}
+    >
+      <div className="reader-toolbar">
+        <span>{t('THE 1915 VOLUME', 'مجلد ١٩١٥')}</span>
+        <span>{t('English edition', 'النسخة العربية')}</span>
+      </div>
+      <article
+        className="reader-paper"
+        aria-label={content.NAV[chapterIndex][1]}
+        tabIndex={0}
+      >
+        <div className="reader-running-head">
+          <span>{t('THE TEMPLE OF BÎGEH', 'معبد بيجة')}</span>
+          <span>{content.NAV[chapterIndex][1]}</span>
+        </div>
+        <div className="reader-viewport" ref={viewport}>
+          <div
+            className="reader-flow"
+            ref={flow}
+            style={{
+              transform: `translateX(${(locale === 'ar' ? 1 : -1) * page * metrics.stride}px)`,
+            }}
+          >
+            <Chapter id={chapter} content={content} onOpen={onOpen} />
+          </div>
+        </div>
+        <div className="reader-folio" aria-live="polite">
+          {page + 1} / {metrics.count}
+        </div>
+      </article>
+      <div className="reader-pagination">
+        <button
+          onClick={() => turn(-1)}
+          disabled={page === 0 && chapterIndex === 0}
+        >
+          <span aria-hidden="true">{locale === 'ar' ? '→' : '←'}</span>{' '}
+          {t('Previous', 'السابق')}
+        </button>
+        <span>
+          {t('Page', 'صفحة')} {page + 1} {t('of', 'من')} {metrics.count}
+        </span>
+        <button
+          onClick={() => turn(1)}
+          disabled={
+            page === metrics.count - 1 &&
+            chapterIndex === content.NAV.length - 1
+          }
+        >
+          {t('Next', 'التالي')}{' '}
+          <span aria-hidden="true">{locale === 'ar' ? '←' : '→'}</span>
+        </button>
+      </div>
+    </div>
   )
 }
 
-function Sources() {
+export function BookHero() {
+  const { t } = useLocale()
   return (
-    <Sheet id="sources">
-      <RunningHead left="Index of authorities quoted." right="Sources." />
-      <SectionTitle sub="Every passage on this page is quoted from one of the works below.">Index of Authorities Quoted.</SectionTitle>
-      <ol className="space-y-4">
-        {FURTHER_READING.map((id) => {
-          const s = SOURCES[id]
-          return (
-            <li key={id} className="border-b border-ink-300/40 pb-4 text-[0.98rem] leading-relaxed">
-              <span className="smallcaps text-ink-700">{s.short}. </span>
-              {s.citation}{' '}
-              <a href={s.url} target="_blank" rel="noreferrer" className="break-all text-vermilion-dark underline underline-offset-4">
-                {s.url}
-              </a>
-              {s.note && <p className="mt-1 text-sm italic text-ink-500">{s.note}</p>}
-            </li>
-          )
-        })}
-      </ol>
-      <p className="mt-8 text-center text-xs text-ink-500">
-        Blackman’s volume is in the public domain. Wikipedia text is CC BY-SA 4.0. Other works are cited for reference only.
-      </p>
-    </Sheet>
+    <main className="book-page landing-page" id="home-main">
+      <header className="book-hero" id="home">
+        <p className="eyebrow">
+          {t('BÎGEH, ASWAN · A RECORD IN STONE', 'بيجة، أسوان · سجلّ في الحجر')}
+        </p>
+        <h1>{t('The Gate of Isis', 'بوابة إيزيس')}</h1>
+        <p className="book-hero-intro">
+          {t(
+            'A monument, its inscriptions, and the landscape that holds them.',
+            'أثرٌ ونقوشه والمشهد الذي يحتضنه.',
+          )}
+        </p>
+        <img
+          className="gate-sketch"
+          src={`${import.meta.env.BASE_URL}art/gate-sketch.png`}
+          width="1086"
+          height="1448"
+          alt={t(
+            'A sketch of the gate of Isis, its arch and the stone stairs rising from the water.',
+            'رسم لبوابة إيزيس وعقدها ودرجاتها الحجرية الصاعدة من الماء.',
+          )}
+          fetchPriority="high"
+        />
+        <blockquote className="hero-quotation">
+          {t(
+            '"...the divine doors of the gates of the horizon, the hall of heaven upon earth, the great doors of the places of Osiris..."',
+            '«...الأبواب الإلهية لبوابات الأفق، قاعة السماء على الأرض، الأبواب العظيمة لمواضع أوزيريس...»',
+          )}
+        </blockquote>
+        <a className="hero-citation" href="#doors">
+          {t(
+            'BLACKMAN · THE TEMPLE OF BÎGEH · 1915, P. 47',
+            'بلاكمان · معبد بيجة · ١٩١٥، ص ٤٧',
+          )}
+        </a>
+        <div className="hero-actions">
+          <a href="#title">
+            {t('Read the book', 'اقرأ الكتاب')} <Icon name="arrow" size={18} />
+          </a>
+          <a href="#3d">
+            {t('Explore the gate in 3D', 'استكشف البوابة ثلاثية الأبعاد')}{' '}
+            <Icon name="arrow" size={18} />
+          </a>
+        </div>
+      </header>
+    </main>
   )
 }
 
 export default function Book() {
+  const { locale, t } = useLocale()
+  const content = locale === 'ar' ? arabic : english
+  const [chapter, setChapter] = useState(chapterFromHash)
   const [index, setIndex] = useState(-1)
-  const gallery = [{ id: 'plate-01-plan', num: 'I', caption: PLAN.caption }, ...PLATES]
-
-  const open = useCallback((plate) => {
-    const i = gallery.findIndex((p) => p.id === plate.id)
-    setIndex(i)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  const gallery = [
+    { id: 'plate-01-plan', num: 'I', caption: content.PLAN.caption },
+    ...content.PLATES,
+  ]
+  useEffect(() => {
+    const navigate = () => setChapter(chapterFromHash())
+    window.addEventListener('hashchange', navigate)
+    return () => window.removeEventListener('hashchange', navigate)
+  }, [])
+  useEffect(() => {
+    if (window.location.hash && window.location.hash !== '#home')
+      requestAnimationFrame(() =>
+        document
+          .getElementById(chapter)
+          ?.scrollIntoView({ block: 'start', behavior: 'instant' }),
+      )
+  }, [chapter])
   const close = useCallback(() => setIndex(-1), [])
-  const step = useCallback((d) => setIndex((i) => (i + d + gallery.length) % gallery.length), [gallery.length])
-
+  const step = useCallback(
+    (d) =>
+      setIndex(
+        (i) =>
+          (i + d + english.PLATES.length + 1) % (english.PLATES.length + 1),
+      ),
+    [],
+  )
   return (
-    <div className="leather min-h-screen">
-      <Nav />
-      <Cover />
-      <main className="px-3 pb-16 sm:px-6">
-        <TitlePage />
-        <Preface />
-        <Introduction onOpen={open} />
-        <Plan onOpen={open} />
-        <Gate onOpen={open} />
-        <Doors onOpen={open} />
-        <Graffiti />
-        <Plates onOpen={open} />
-        <Context />
-        <Sources />
-      </main>
-      <footer className="caps py-8 text-center text-[0.65rem] text-paper-300">
-        The Gate of Isis · Bîgeh, Aswan · Built with React and Tailwind CSS
+    <main className="book-page" id="book-main">
+      <div className="book-layout">
+        <aside className="book-contents">
+          <p className="control-label">{t('CONTENTS', 'المحتويات')}</p>
+          <nav aria-label={t('Book contents', 'محتويات الكتاب')}>
+            {content.NAV.map(([id, label], i) => (
+              <a
+                href={`#${id}`}
+                key={id}
+                aria-current={chapter === id ? 'page' : undefined}
+              >
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                {label}
+              </a>
+            ))}
+          </nav>
+          <p className="contents-note">
+            {t(
+              'Aylward M. Blackman\nCairo, 1915',
+              'أيلورد م. بلاكمان\nالقاهرة، ١٩١٥',
+            )}
+          </p>
+        </aside>
+        <section id={chapter} className="reader-section">
+          <PaginatedReader
+            key={`${locale}-${chapter}`}
+            chapter={chapter}
+            content={content}
+            onOpen={(p) => setIndex(gallery.findIndex((x) => x.id === p.id))}
+            onChapter={(id) => {
+              window.location.hash = id
+            }}
+          />
+        </section>
+      </div>
+      <footer className="survey-footer">
+        <span>
+          {t('THE GATE OF ISIS · BÎGEH, ASWAN', 'بوابة إيزيس · بيجة، أسوان')}
+        </span>
+        <a href="#3d">
+          {t('Continue to the digital survey →', 'تابع إلى المسح الرقمي ←')}
+        </a>
       </footer>
       <Lightbox plates={gallery} index={index} onClose={close} onStep={step} />
-    </div>
+    </main>
   )
 }
