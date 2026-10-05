@@ -22,6 +22,9 @@ function sameShape(original, translation, path = 'content') {
     )
 }
 sameShape(en, ar)
+const arabicText = JSON.stringify(ar).normalize('NFD').replace(/[\u064B-\u065F]/g,'')
+assert.ok(!arabicText.includes('الحسة'),'Incorrect Heissa spelling returned')
+assert.equal((arabicText.match(/هيصة/g)||[]).length,3,'Heissa must appear in both introduction mentions and the plate caption')
 assert.deepEqual(
   en.NAV.map((x) => x[0]),
   ar.NAV.map((x) => x[0]),
