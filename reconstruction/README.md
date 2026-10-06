@@ -30,6 +30,36 @@ SIFT texture features were mapped back to their 3D triangle surfaces through UV 
 
 `28_9_2026 2.zip` is the **top of the gate**, not the approach stairs. It did not produce enough consistent correspondences to validate registration. It remains a clearly labeled independent reference scene and website source model; it is not falsely fused into the main reconstruction. The photographic model therefore retains the capture gaps in the top surfaces.
 
+### Roof registration follow-up · 6 October 2026
+
+`output/Gate-of-Isis-Roof-Study.blend` contains the complete photographic site and
+an editable roof scan placed above the gate. **This is a provisional inspection
+study, not a validated stitch.** The archival master and published models are
+unchanged. Four comparison renders are saved as `reports/roof-candidate-*.png`.
+
+Eighteen geometric registration trials tested both roof orientations, several
+starting heights and small changes in heading. Fitting used vertical faces and
+same-facing normals to avoid matching the roof top to the ceiling underside.
+The preferred orientation repeatedly approached a scale of 0.2991, consistent
+with the other Polycam captures. Of 6,000 sampled vertical-face points, 1,444
+fell within 0.035 reconstruction units; their median distance was 0.00481 units.
+These selected fitting residuals do not establish accuracy for the whole roof.
+
+The independent comparison against the already registered Polycam gate scan
+supported only 7.9% of the roof's vertical faces at the same threshold. Guided
+texture matching yielded only four distinct target features, insufficient for
+validated landmarks. In the combined renders, captured ceiling geometry
+intersects the roof's central recess; rim gaps and capture artifacts remain.
+The vertical placement and seams therefore remain unresolved. No synthetic
+stone, smoothing, welding or hole filling was used to conceal these problems.
+The disconnected fragment below the roof was omitted from the study only.
+
+`scripts/register_roof_geometry.py` reproduces the geometric trials from the
+captured meshes. `scripts/export_roof_study.py`, run in Blender afterward, saves
+the separate packed study and inspection renders. The decision and checks are
+recorded in `reports/roof-registration.json`; all trial transforms are retained
+in `reports/roof-geometry-trials.json`.
+
 No surveyed control distances, ground-control points, or independent scale checks were supplied. The photographic reconstruction has relative scale and must not be used as a validated metric survey. The two supporting Polycam similarities have scale factors around 0.30, but this alone does not establish survey-grade dimensions. No hypothetical restoration or generated architectural detail is included.
 
 ## Reproduction

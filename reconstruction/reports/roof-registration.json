@@ -1,0 +1,98 @@
+{
+  "status": "provisional geometric placement \u2014 not validated for fusion",
+  "date": "2026-10-06",
+  "source": "28_9_2026 2.zip / upper-stairs (legacy identifier; top of gate)",
+  "method": "18 multi-start similarity ICP trials on vertical faces with same-facing normal filtering; source top and ceiling underside excluded from fitting. No generated geometry, surface welding or hole filling.",
+  "candidate": {
+    "initialYaw": 100,
+    "initialZ": 2.4,
+    "scale": 0.29914382376756654,
+    "rotationDegrees": [
+      3.6384267669488293,
+      6.824204137917276,
+      93.16973825355524
+    ],
+    "translation": [
+      0.5187407090335054,
+      -2.376275954669151,
+      2.3805288013898864
+    ],
+    "correspondences": 1444,
+    "testedSourcePoints": 6000,
+    "medianDistance": 0.004811023693377724,
+    "sourceSpread": [
+      2.199077606201172,
+      3.8379549980163574,
+      0.42839500308036804
+    ],
+    "matrix": [
+      [
+        -0.016423718875937274,
+        -0.2982088587896422,
+        0.016993095537433157,
+        0.5187407090335054
+      ],
+      [
+        0.29657009422523495,
+        -0.01425531629370508,
+        0.0364690617768348,
+        -2.376275954669151
+      ],
+      [
+        -0.0355452945943672,
+        0.01884913247411075,
+        0.29642582467702455,
+        2.3805288013898864
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "trials": 18,
+  "fitThreshold": 0.035,
+  "normalAgreementMinimum": 0.75,
+  "units": "relative reconstruction units; not metres or independently checked survey accuracy",
+  "supportingGateScanCheck": {
+    "testedSourceVerticalFaces": 19254,
+    "matchingFaces": 1522,
+    "fraction": 0.07904850940064402,
+    "medianDistanceOfAcceptedFaces": 0.01918272068895608
+  },
+  "textureCheck": {
+    "sourceFeatures": 22108,
+    "targetFeatures": 112586,
+    "spatiallyNearbySourceFeatures": 4889,
+    "descriptorCandidatesBelow250": 15,
+    "uniqueTargetFeatures": 4,
+    "conclusion": "Not sufficient to establish distinct, validated texture landmarks."
+  },
+  "visualReview": {
+    "views": [
+      "above",
+      "front",
+      "reverse",
+      "end"
+    ],
+    "findings": [
+      "Roof covers the gate opening in the expected general location.",
+      "Captured ceiling geometry intersects the placed roof at the central recess.",
+      "Rim gaps and capture artifacts remain visible.",
+      "Vertical placement and seams are not validated; a visually plausible footprint is insufficient evidence for a precise stitch."
+    ]
+  },
+  "decision": "Keep the published and archival main reconstruction unchanged. Save an editable local roof-placement study for inspection.",
+  "artifacts": {
+    "blender": "output/Gate-of-Isis-Roof-Study.blend",
+    "renders": [
+      "reports/roof-candidate-above.png",
+      "reports/roof-candidate-front.png",
+      "reports/roof-candidate-reverse.png",
+      "reports/roof-candidate-end.png"
+    ]
+  },
+  "cleanup": "The disconnected fragment below the roof was omitted only from the study. Original ZIP, reference model, and master remain unchanged."
+}
