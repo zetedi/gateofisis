@@ -60,6 +60,34 @@ the separate packed study and inspection renders. The decision and checks are
 recorded in `reports/roof-registration.json`; all trial transforms are retained
 in `reports/roof-geometry-trials.json`.
 
+### Roof aligned to the rim · 6 October 2026
+
+The later `output/Gate-of-Isis-Roof-Aligned.blend` applies the user's observation
+that the stone joint already matches horizontally. A rigid correction raises
+the roof by 0.03929 relative units at its centre and adjusts its tilt by
+2.304° about X and −4.283° about Y. It retains the captured roof shape and
+texture coordinates. Both ends, both oblique sides and the overhead view were
+rendered and inspected. The earlier study remains available for comparison.
+
+The median absolute height difference at 1,000 sampled rim comparisons drops
+from approximately 0.057 to 0.010 reconstruction units. In a separate local
+check, the roof is above all 36,980 sampled overlapping central-ceiling points;
+the previous placement penetrated part of that sample. This is a visual
+alignment with local checks, not an independently controlled metric survey.
+
+The blue sky-colored capture strips along the join were inspected in diagnostic
+renders and isolated as 8,854 original triangles in a hidden collection. Their
+coordinates and UVs remain available, making the cleanup reversible. No new
+stone surfaces, inscriptions, smoothing or hole filling were introduced.
+Small residual scan-edge artifacts remain.
+
+Run `prepare_roof_rim_alignment.py` in the reconstruction Python environment,
+then `export_aligned_roof.py` in Blender. `validate_aligned_roof.py` compares
+the retained stone coordinates, UVs and material assignments against the
+earlier study and checks the roof transform and packed textures. Reports are
+`roof-rim-alignment.json` and `roof-alignment-validation.json`. The aligned
+Blender file is a local deliverable; the published website models are unchanged.
+
 No surveyed control distances, ground-control points, or independent scale checks were supplied. The photographic reconstruction has relative scale and must not be used as a validated metric survey. The two supporting Polycam similarities have scale factors around 0.30, but this alone does not establish survey-grade dimensions. No hypothetical restoration or generated architectural detail is included.
 
 ## Reproduction

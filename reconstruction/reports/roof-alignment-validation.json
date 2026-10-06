@@ -1,0 +1,11 @@
+{
+  "retainedMainTriangles": 12690793,
+  "roofTriangles": 97835,
+  "hiddenSkyTriangles": 8854,
+  "retainedMainCoordinatesUvsAndMaterialsIdentical": true,
+  "roofCoordinatesUvsAndMaterialsIdentical": true,
+  "mainTransformUnchanged": true,
+  "roofTransformMatchesCorrection": true,
+  "allUsedTexturesPacked": true,
+  "skyCleanupReversible": true
+}

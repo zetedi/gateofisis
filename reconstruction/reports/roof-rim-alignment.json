@@ -1,0 +1,103 @@
+{
+  "status": "User-guided visual alignment to the upper rim",
+  "date": "2026-10-06",
+  "method": "Matching stone joint retains the existing horizontal correspondence. Robust upper-rim fit supplies a rigid height and tilt correction; no scaling or mesh deformation.",
+  "pivot": [
+    0.53,
+    -2.38,
+    2.52
+  ],
+  "heightChange": 0.039289076325869934,
+  "rotationDegrees": [
+    2.3037539853932296,
+    -4.283063051342044,
+    0.0
+  ],
+  "correctionMatrix": [
+    [
+      0.9972072540819485,
+      -0.003002090091474231,
+      -0.07462358783536668,
+      0.18238662226398272
+    ],
+    [
+      0.0,
+      0.9991917635586051,
+      -0.04019725906880488,
+      0.09937349012286845
+    ],
+    [
+      0.07468395012544538,
+      0.04008499833762362,
+      0.9964012748395762,
+      0.10417766620719622
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "combinedRegistrationMatrix": [
+    [
+      -0.014615664330091685,
+      -0.2987398313655368,
+      -0.0052842038342266135,
+      0.5291688146927902
+    ],
+    [
+      0.29775921888314094,
+      -0.01500147808887695,
+      0.024524080482896792,
+      -2.370672604675129
+    ],
+    [
+      -0.02475595331577319,
+      -0.004061540239923085,
+      0.29809004338385364,
+      2.419628186253256
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "boundaryComparisonPoints": 1000,
+  "boundaryMedianAbsoluteHeightDifferenceBefore": 0.05727152635079058,
+  "boundaryMedianAbsoluteHeightDifferenceAfter": 0.010074831700652931,
+  "units": "Relative reconstruction units. Visual alignment, not independently measured survey accuracy.",
+  "sampledCeilingClearance": {
+    "before": {
+      "samples": 36991,
+      "roofAboveCeilingFraction": 0.9111675813035603,
+      "minimum": -0.05340281914201661,
+      "median": 0.04493081491164741
+    },
+    "after": {
+      "samples": 36980,
+      "roofAboveCeilingFraction": 1.0,
+      "minimum": 0.0002670574504430867,
+      "median": 0.08065871956362347
+    },
+    "method": "Nearest XY roof-face-center height at sampled downward-facing central ceiling faces; a local overlap check, not a complete solid-intersection proof."
+  },
+  "seamCleanup": {
+    "skyColoredTriangles": 8854,
+    "handling": "Visually inspected in magenta diagnostic renders. Isolated in a hidden collection in the aligned derivative; original vertex coordinates and UVs retained.",
+    "stoneGeometry": "No invented surfaces, smoothing, welding or hole filling."
+  },
+  "artifacts": {
+    "blender": "output/Gate-of-Isis-Roof-Aligned.blend",
+    "earlierStudyPreserved": "output/Gate-of-Isis-Roof-Study.blend",
+    "renders": [
+      "reports/roof-aligned-end.png",
+      "reports/roof-aligned-opposite-end.png",
+      "reports/roof-aligned-reverse.png",
+      "reports/roof-aligned-front.png",
+      "reports/roof-aligned-above.png"
+    ]
+  }
+}
