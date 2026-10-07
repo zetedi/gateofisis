@@ -1,14 +1,20 @@
 [
   {
-    "file": "complete-site-high.glb",
-    "triangles": 899999,
+    "file": "high/complete-site-high.gltf",
+    "triangles": 1000059,
     "textureDimension": 4096,
-    "bytes": 77843560
+    "bytes": 54059266,
+    "openUpperBoundaryEdges": 0,
+    "webSeamCapTriangles": 91,
+    "closureCheck": "Decoded web geometry; roof-only region; 0.00004 reconstruction-unit quantization tolerance."
   },
   {
-    "file": "complete-site.glb",
-    "triangles": 242998,
+    "file": "complete-site-sealed.glb",
+    "triangles": 300059,
     "textureDimension": 2048,
-    "bytes": 24376260
+    "bytes": 18805360,
+    "openUpperBoundaryEdges": 0,
+    "webSeamCapTriangles": 60,
+    "closureCheck": "Decoded web geometry; roof-only region; 0.00004 reconstruction-unit quantization tolerance."
   }
 ]

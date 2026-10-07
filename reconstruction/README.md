@@ -88,6 +88,42 @@ earlier study and checks the roof transform and packed textures. Reports are
 `roof-rim-alignment.json` and `roof-alignment-validation.json`. The aligned
 Blender file is a local deliverable; the published website models are unchanged.
 
+### Sealed presentation and website models · 7 October 2026
+
+`output/Gate-of-Isis-Sealed.blend` includes the aligned roof and a separate,
+editable repair mesh. The repair connects 1,011 roof boundary edges to 1,085
+gate-rim edges and caps 44 small upper capture holes. The upper-region boundary
+check reports zero remaining open edges. There are 14 multiple-face edge
+junctions at pinched capture boundaries in the assembled full-detail mesh;
+this is a presentation repair, not a certified manifold mesh for fabrication.
+The doorway, real recesses and outer terrain capture boundary remain open.
+
+The 19,593 repair triangles use colors sampled from adjacent captured stone.
+They are explicitly interpolated surfaces, not new archaeological evidence.
+No inscriptions were generated. The captured gate and roof coordinates, UVs
+and transforms are unchanged, and all source textures are packed. The visible
+master has 12,808,221 triangles. Earlier masters remain available separately.
+
+All three website quality levels now use this assembly. The original-detail
+view contains 4,740,539 native gate triangles, 299,999 context triangles, the
+97,835-triangle roof and the repair mesh. Its eleven original 8K atlases are
+reused unchanged, with the native 4096 × 2880 roof texture added. Lower-detail
+web derivatives are welded before reduction and checked again for open upper
+edges. Their tiny simplification gaps are capped in the exported presentation
+mesh. A dedicated Roof view lets visitors inspect the result.
+
+Reproduce with `extract_sealing_regions.py` in Blender,
+`prepare_roof_sealing.py` in the reconstruction Python environment, and
+`save_sealed_master.py` in Blender. `export_sealed_site.py` creates all web
+derivatives. Run `inspect_web_roof.py` in Blender, `prepare_web_seam_caps.py`
+in the reconstruction environment, then `apply_web_seam_caps.py` in Blender
+to close tiny simplification gaps. Re-run `inspect_web_roof.py` and then
+`validate_web_roof.py` to check the actual decoded exports.
+`package_sealed_detail.py` reuses the native compressed atlases;
+`finalize_sealed_web.py` updates public metadata after those checks pass. `validate_sealed_master.py`
+checks the source meshes and packed textures. The numerical records are
+`roof-sealing.json`, `sealed-master-validation.json` and `site-export.json`.
+
 No surveyed control distances, ground-control points, or independent scale checks were supplied. The photographic reconstruction has relative scale and must not be used as a validated metric survey. The two supporting Polycam similarities have scale factors around 0.30, but this alone does not establish survey-grade dimensions. No hypothetical restoration or generated architectural detail is included.
 
 ## Reproduction

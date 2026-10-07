@@ -1,26 +1,232 @@
 [
   {
-    "file": "models/complete-site.glb",
-    "bytes": 24376260,
-    "triangles": 242998,
+    "file": "models/complete-site-sealed.glb",
+    "bytes": 18805360,
+    "triangles": 300059,
     "errors": 0,
     "warnings": 0,
-    "messages": []
+    "messages": [
+      {
+        "code": "UNSUPPORTED_EXTENSION",
+        "message": "Cannot validate an extension as it is not supported by the validator: 'KHR_draco_mesh_compression'.",
+        "severity": 2,
+        "pointer": "/extensionsUsed/0"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/meshes/1/primitives/12/attributes/TEXCOORD_0"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/0"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/1"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/3"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/5"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/7"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/9"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/11"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/13"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/15"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/17"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/19"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/21"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/23"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/25"
+      },
+      {
+        "code": "IMAGE_NPOT_DIMENSIONS",
+        "message": "Image has non-power-of-two dimensions: 2048x1440.",
+        "severity": 2,
+        "pointer": "/images/11"
+      }
+    ]
   },
   {
-    "file": "models/complete-site-high.glb",
-    "bytes": 77843560,
-    "triangles": 899999,
+    "file": "models/high/complete-site-high.gltf",
+    "bytes": 19275,
+    "triangles": 1000059,
     "errors": 0,
     "warnings": 0,
-    "messages": []
+    "messages": [
+      {
+        "code": "UNSUPPORTED_EXTENSION",
+        "message": "Cannot validate an extension as it is not supported by the validator: 'KHR_draco_mesh_compression'.",
+        "severity": 2,
+        "pointer": "/extensionsUsed/0"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/meshes/1/primitives/12/attributes/TEXCOORD_0"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/0"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/1"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/2"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/3"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/4"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/5"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/6"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/7"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/8"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/9"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/10"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/11"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/12"
+      },
+      {
+        "code": "UNUSED_OBJECT",
+        "message": "This object may be unused.",
+        "severity": 2,
+        "pointer": "/bufferViews/13"
+      },
+      {
+        "code": "IMAGE_NPOT_DIMENSIONS",
+        "message": "Image has non-power-of-two dimensions: 4096x2880.",
+        "severity": 2,
+        "pointer": "/images/11"
+      }
+    ]
   },
   {
-    "file": "models/detail/gate-detail.gltf",
-    "bytes": 17556,
-    "triangles": 5049392,
+    "file": "models/detail/gate-detail-sealed.gltf",
+    "bytes": 19714,
+    "triangles": 5157966,
     "errors": 0,
-    "warnings": 11,
+    "warnings": 12,
     "messages": [
       {
         "code": "UNSUPPORTED_EXTENSION",
@@ -32,7 +238,7 @@
         "code": "UNSUPPORTED_EXTENSION",
         "message": "Cannot validate an extension as it is not supported by the validator: 'KHR_texture_basisu'.",
         "severity": 2,
-        "pointer": "/extensionsUsed/1"
+        "pointer": "/extensionsUsed/2"
       },
       {
         "code": "VALUE_NOT_IN_LIST",
@@ -99,6 +305,12 @@
         "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
         "severity": 1,
         "pointer": "/images/10/mimeType"
+      },
+      {
+        "code": "VALUE_NOT_IN_LIST",
+        "message": "Invalid value 'image/ktx2'. Valid values are ('image/jpeg', 'image/png').",
+        "severity": 1,
+        "pointer": "/images/11/mimeType"
       },
       {
         "code": "UNUSED_OBJECT",
@@ -195,12 +407,6 @@
         "message": "This object may be unused.",
         "severity": 2,
         "pointer": "/bufferViews/15"
-      },
-      {
-        "code": "UNUSED_OBJECT",
-        "message": "This object may be unused.",
-        "severity": 2,
-        "pointer": "/bufferViews/16"
       }
     ]
   },

@@ -8,11 +8,11 @@ const modelArabic = [
   {
     title: 'البوابة والموقع المحيط',
     shortTitle: 'الموقع الكامل',
-    subtitle: 'إعادة بناء فوتوغرافية واحدة',
+    subtitle: 'البوابة وسقفها في نموذج واحد',
     description:
-      'البوابة ودرجات المدخل والرصف والأعمدة والأحجار المتناثرة معًا في نموذج فوتوغرافي واحد.',
+      'البوابة وسقفها المُحاذى ودرجات المدخل والرصف والأعمدة والأحجار المتناثرة معًا. أُغلقت الفجوات الصغيرة حول اتصال السقف.',
     record: 'المسح التصويري',
-    note: '١٬٠٥٤ صورة متحاذية · البوابة ومحيطها في نموذج واحد · اختر التفاصيل الأصلية لعرض هندسة البوابة المصوّرة وخامات بدقة 8K.',
+    note: '١٬٠٥٤ صورة متحاذية · السقف والمحيط في نموذج واحد · فواصل السقف والفجوات الصغيرة مُغلقة · اختر التفاصيل الأصلية لعرض خامات البوابة بدقة 8K.',
   },
   {
     title: 'البوابة والمنصة المطلة على الماء',
@@ -35,9 +35,9 @@ const modelArabic = [
     shortTitle: 'أعلى البوابة',
     subtitle: 'مرجع مستقل للجزء العلوي',
     description:
-      'الجزء العلوي من البوابة، المصوّر بصورة مستقلة والمحفوظ بتفاصيله الأصلية. لم يُتحقّق بعد من محاذاته مع الموقع الكامل.',
+      'المسح الأصلي المنفصل لأعلى البوابة. أُدرجت نسخة مُحاذاة منه في نموذج الموقع الكامل.',
     record: 'Polycam · ٢٨ سبتمبر',
-    note: 'مرجع مستقل لأعلى البوابة: لا تكفي السمات المشتركة لإثبات موضعه في النموذج الرئيسي.',
+    note: 'المسح الأصلي محفوظ للمقارنة. اختر الموقع الكامل لرؤية السقف المُحاذى مع الفواصل المُغلقة.',
   },
 ]
 
@@ -139,7 +139,7 @@ export default function GatePage() {
   const [selection, setSelection] = useState(0)
   const [quality, setQuality] = useState('standard')
   const [mode, setMode] = useState('texture')
-  const [view, setView] = useState('overview')
+  const [view, setView] = useState(() => window.location.hash === '#3d-roof' ? 'roof' : 'overview')
   const [rotating, setRotating] = useState(false)
   const [stats, setStats] = useState(null)
   const [photos, setPhotos] = useState([])
@@ -147,7 +147,7 @@ export default function GatePage() {
   const [showHelp, setShowHelp] = useState(false)
   useEffect(() => {
     const controller = new AbortController()
-    fetch(asset('models/survey.json'), { signal: controller.signal })
+    fetch(asset('models/survey.json'), { signal: controller.signal, cache: 'no-cache' })
       .then((r) => {
         if (!r.ok) throw new Error('Survey unavailable')
         return r.json()
@@ -163,7 +163,7 @@ export default function GatePage() {
     return () => controller.abort()
   }, [])
   useEffect(() => {
-    if (photos.length && ['#3d-inscriptions', '#3d-archive'].includes(window.location.hash)) {
+    if (photos.length && ['#3d-inscriptions', '#3d-archive', '#3d-roof'].includes(window.location.hash)) {
       document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: 'instant', block: 'start' })
     }
   }, [photos])
@@ -202,6 +202,7 @@ export default function GatePage() {
         ['overview', t('Gate & stairs', 'البوابة والدرج')],
         ['detail', t('Gate close-up', 'البوابة عن قرب')],
         ['inscriptions', t('Inscriptions', 'النقوش')],
+        ['roof', t('Roof', 'السقف')],
         ['site', t('Whole site', 'الموقع كاملًا')],
         ['front', t('Front', 'الأمام')],
         ['back', t('Reverse', 'الخلف')],
@@ -213,9 +214,11 @@ export default function GatePage() {
         ['back', t('Reverse', 'الخلف')],
         ['top', t('Above', 'الأعلى')],
       ]
-  const download = model?.file.endsWith('.gltf')
-    ? sourceModel.highFile
-    : model?.file
+  const download = sourceModel?.downloadFile || model?.file
+  const downloadBytes = sourceModel?.downloadBytes || model?.bytes
+  const detailSize = new Intl.NumberFormat(locale).format(
+    Math.round((sourceModel?.detailBytes || 0) / 1e6),
+  )
   const photoSection = (items, inscriptions) =>
     items.length > 0 && (
       <section
@@ -309,6 +312,7 @@ export default function GatePage() {
       </section>
       <section
         className="survey-workspace"
+        id="3d-roof"
         aria-label={t('Interactive 3D survey', 'المسح التفاعلي ثلاثي الأبعاد')}
       >
         <div className="workspace-heading">
@@ -430,14 +434,14 @@ export default function GatePage() {
                 <a className="model-download" href={asset(download)} download>
                   <span>
                     <Icon name="download" size={18} />
-                    {t('Download portable model', 'تنزيل النموذج المحمول')}
+                    {sourceModel.downloadFile
+                      ? t('Download model · 2K', 'تنزيل النموذج · 2K')
+                      : t('Download source scan', 'تنزيل المسح الأصلي')}
                   </span>
                   <small>
                     GLB ·{' '}
                     {(
-                      (quality === 'detail'
-                        ? sourceModel.highBytes
-                        : model.bytes) / 1e6
+                      downloadBytes / 1e6
                     ).toFixed(1)}{' '}
                     MB
                   </small>
@@ -466,8 +470,8 @@ export default function GatePage() {
                       {sourceModel.detailFile && (
                         <option value="detail">
                           {t(
-                            'Original detail · 8K · 169 MB',
-                            'التفاصيل الأصلية · 8K · ١٦٩ م.ب.',
+                            `Original detail · 8K · ${detailSize} MB`,
+                            `التفاصيل الأصلية · 8K · ${detailSize} م.ب.`,
                           )}
                         </option>
                       )}
@@ -548,8 +552,8 @@ export default function GatePage() {
             </h2>
             <p>
               {t(
-                '4.75 million triangles on the gate. Eleven 8K textures. Open the original detail, then zoom into a carved surface.',
-                '٤٫٧٥ مليون مثلث على البوابة. إحدى عشرة خريطة خامات بدقة 8K. افتح التفاصيل الأصلية، ثم اقترب من السطح المنقوش.',
+                'The captured gate geometry, eleven 8K textures, and the aligned roof. Open the original detail, then zoom into a carved surface.',
+                'هندسة البوابة المصوّرة، وإحدى عشرة خريطة خامات بدقة 8K، والسقف المُحاذى. افتح التفاصيل الأصلية، ثم اقترب من السطح المنقوش.',
               )}
             </p>
           </div>
@@ -568,8 +572,8 @@ export default function GatePage() {
             {quality === 'detail'
               ? t('Original detail selected', 'التفاصيل الأصلية محدّدة')
               : t(
-                  'Open original detail · 169 MB',
-                  'فتح التفاصيل الأصلية · ١٦٩ م.ب.',
+                  `Open original detail · ${detailSize} MB`,
+                  `فتح التفاصيل الأصلية · ${detailSize} م.ب.`,
                 )}
           </button>
         </div>
@@ -627,13 +631,13 @@ export default function GatePage() {
               {t(
                 survey?.method ||
                   'The original scans preserve captured stone surfaces.',
-                'أُعيد بناء البوابة والأحجار المحيطة من ١٬٠٥٤ صورة متحاذية. يحتفظ ملف Blender الأصلي بـ١٢٫٧ مليون مثلث وإحدى عشرة خريطة خامات بدقة 8K. يحافظ عرض التفاصيل الأصلية على ٤٫٧٥ مليون مثلث للبوابة، مع محيط أخف وخامات 8K مضغوطة للمتصفح. وتبقى مسوحات Polycam المنقّحة مراجع مساندة.',
+                'أُعيد بناء البوابة والأحجار المحيطة من ١٬٠٥٤ صورة متحاذية، وأُضيف مسح Polycam لأعلى البوابة بعد محاذاته. أُغلقت فواصل السقف والفجوات الصغيرة بأسطح ترميم منفصلة وقابلة للتحرير في ملف Blender. تحتفظ البوابة بهندستها المصوّرة وخاماتها الأصلية بدقة 8K.',
               )}
             </p>
             <p className="record-caveat">
               {t(
                 survey?.limitation || 'Gaps reflect capture coverage.',
-                'تعكس الحواف المفتوحة والفجوات حدود التصوير. لم تُراجَع الأبعاد مقابل نقاط ضبط مساحية. لم يمكن محاذاة أعلى البوابة، المصوّر بصورة مستقلة، محاذاة موثوقة؛ لذا يبقى مرجعًا مستقلًا. لم تُبتكَر أجزاء معمارية مفقودة.',
+                'الأسطح التي تُغلق فجوات المسح مستكملة بالاستيفاء وليست تفاصيل أثرية مصوّرة؛ أُخذت ألوانها من الحجر المجاور، ولم تُولَّد نقوش جديدة. تبقى فتحة البوابة وحواف نطاق التصوير مفتوحة. لم تُراجَع الأبعاد مقابل نقاط ضبط مساحية.',
               )}
             </p>
             <a

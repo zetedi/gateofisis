@@ -39,10 +39,10 @@ for (const photo of photos) {
   assert.equal(createHash('sha256').update(await readFile(`public/${photo.image}`)).digest('hex'),photo.sha256,'Original photograph changed')
   await stat(`public/${photo.thumbnail}`)
 }
-const detail = JSON.parse(
-  await readFile('public/models/detail/gate-detail.gltf', 'utf8'),
-)
-assert.equal(detail.images.length, 11)
+const survey = JSON.parse(await readFile('public/models/survey.json', 'utf8'))
+const detail = JSON.parse(await readFile(`public/${survey.models[0].detailFile}`, 'utf8'))
+assert.equal(detail.images.length, 12)
+let nativeAtlasCount = 0
 for (const image of detail.images) {
   const bytes = await readFile(`public/models/detail/${image.uri}`)
   assert.deepEqual(
@@ -50,8 +50,10 @@ for (const image of detail.images) {
     [171, 75, 84, 88, 32, 50, 48, 187, 13, 10, 26, 10],
     'KTX2 magic',
   )
-  assert.equal(bytes.readUInt32LE(20), 8192, 'Native atlas width')
-  assert.equal(bytes.readUInt32LE(24), 8192, 'Native atlas height')
+  const roof = image.uri === 'roof-atlas.ktx2'
+  assert.equal(bytes.readUInt32LE(20), roof ? 4096 : 8192, 'Native atlas width')
+  assert.equal(bytes.readUInt32LE(24), roof ? 2880 : 8192, 'Native atlas height')
+  if (!roof) nativeAtlasCount += 1
 }
 assert.equal(
   detail.meshes.reduce(
@@ -63,8 +65,11 @@ assert.equal(
       ),
     0,
   ),
-  5049392,
+  survey.models[0].detailTriangles,
 )
-console.log(
-  'English/Arabic structure complete; all plates and photos resolve; eleven 8K KTX2 atlases and 5,049,392 triangles verified.',
-)
+assert.equal(nativeAtlasCount, 11)
+assert.ok(detail.meshes.some(m => m.primitives.some(p => p.attributes.COLOR_0 !== undefined)), 'Repair colors missing')
+for (const model of survey.models) {
+  if (model.downloadFile) assert.equal((await stat(`public/${model.downloadFile}`)).size, model.downloadBytes)
+}
+console.log(`English/Arabic content, originals, eleven 8K atlases, roof texture and ${survey.models[0].detailTriangles.toLocaleString('en')} triangles verified.`)

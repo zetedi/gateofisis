@@ -6,10 +6,10 @@
       "id": "complete-site",
       "title": "The gate and surrounding site",
       "shortTitle": "The complete site",
-      "subtitle": "One photographic reconstruction",
-      "description": "The gate, approach stairs, pavement, columns and scattered stones together in one photographic model.",
-      "file": "models/complete-site.glb",
-      "highFile": "models/complete-site-high.glb",
+      "subtitle": "Gate and roof, together",
+      "description": "The gate, aligned roof, approach stairs, pavement, columns and surrounding stones in one assembled model. Roof seams and small upper capture holes are sealed.",
+      "file": "models/complete-site-sealed.glb",
+      "highFile": "models/high/complete-site-high.gltf",
       "poster": "models/complete-site-poster.jpg",
       "direction": [
         1,
@@ -21,10 +21,10 @@
         0.18,
         1
       ],
-      "bytes": 24376260,
-      "highBytes": 77843560,
+      "bytes": 18805360,
+      "highBytes": 54059266,
       "record": "Photogrammetry",
-      "note": "1,054 aligned photographs · Gate and surroundings in one model · Select Original detail for the gate’s captured geometry and 8K textures.",
+      "note": "1,054 aligned photographs · Roof joined and scan gaps repaired · Choose Original detail for the captured gate geometry and 8K textures.",
       "fit": 0.95,
       "focus": {
         "target": [
@@ -39,10 +39,17 @@
           1.5
         ]
       },
-      "detailFile": "models/detail/gate-detail.gltf",
-      "detailBytes": 169461632,
-      "detailTriangles": 5049392,
-      "detailTextureDimension": 8192
+      "detailFile": "models/detail/gate-detail-sealed.gltf",
+      "detailBytes": 172782593,
+      "detailTriangles": 5157966,
+      "detailTextureDimension": 8192,
+      "downloadFile": "models/complete-site-sealed.glb",
+      "downloadBytes": 18805360,
+      "roofFocus": [
+        0.53,
+        2.48,
+        2.4
+      ]
     },
     {
       "id": "site-b",
@@ -94,8 +101,8 @@
       "id": "upper-stairs",
       "title": "Top of the gate",
       "shortTitle": "Top of the gate",
-      "subtitle": "Independent top reference",
-      "description": "The separately captured top of the gate. Retained at its original detail; its alignment to the complete site is not yet verified.",
+      "subtitle": "Original roof reference",
+      "description": "The original separately captured roof, retained for comparison. Its aligned counterpart is included in the complete site.",
       "file": "models/upper-stairs.glb",
       "poster": "models/upper-stairs-poster.jpg",
       "direction": [
@@ -110,14 +117,23 @@
       ],
       "bytes": 5272076,
       "record": "Polycam · 28 Sep",
-      "note": "Top of the gate. Independent reference: insufficient common features for a validated placement in the main model.",
+      "note": "Original roof capture. Choose The complete site to see the aligned roof with its seams sealed.",
       "cleanup": "See reconstruction/reports/polycam-cleanup.json."
     }
   ],
-  "method": "The gate and surrounding stones were reconstructed together from 1,054 aligned photographs. The Blender master retains 12.7 million triangles and eleven 8K texture atlases. The Original detail view preserves 4.75 million gate triangles, with lighter surroundings and all eleven 8K textures compressed for the browser. Cleaned Polycam scans remain as supporting references.",
-  "limitation": "Open edges and gaps reflect capture coverage. Dimensions have not been checked against survey control. The separately captured top of the gate could not be reliably registered and remains an independent reference; no missing architecture has been invented.",
+  "method": "The gate and surrounding stones were reconstructed from 1,054 aligned photographs. The separately captured Polycam roof is aligned and included in every detail level. Roof seams and small upper capture holes are closed with identifiable repair surfaces in the Blender master. Original detail retains captured gate geometry, eleven original 8K atlases and the native roof texture.",
+  "limitation": "The gap-closing surfaces are interpolated repairs, not measured archaeological detail. Their colors come from neighboring captured stone; no inscriptions were generated. The doorway and outer terrain capture edges remain open. Dimensions have not been checked against survey control.",
   "registeredPhotoCount": 1054,
-  "masterTriangles": 12699647,
-  "masterTextureAtlases": 11,
-  "masterTextureDimension": 8192
+  "masterTriangles": 12808221,
+  "masterTextureAtlases": 12,
+  "masterTextureDimension": 8192,
+  "masterFile": "Gate-of-Isis-Sealed.blend",
+  "roofAssembly": "Aligned to the upper rim using the matching stone joint; captured roof geometry retained.",
+  "repairs": {
+    "roofBoundaryEdgesBridged": 1011,
+    "gateBoundaryEdgesBridged": 1085,
+    "smallCaptureHolesFilled": 44,
+    "upperOpenBoundaryEdges": 0,
+    "interpolatedRepairTriangles": 19593
+  }
 }

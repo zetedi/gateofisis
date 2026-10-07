@@ -172,8 +172,9 @@ export default function ModelViewer({
         ? new THREE.Vector3(...model.focus.target)
         : center.clone()
       if (name === 'detail' || name === 'inscriptions') target.y += 0.45
+      if (name === 'roof' && model.roofFocus) target.set(...model.roofFocus)
       const distance = focused
-        ? (['detail', 'inscriptions'].includes(name)
+        ? (name === 'roof' ? 0.9 : ['detail', 'inscriptions'].includes(name)
             ? 1.05
             : model.focus.radius) /
           Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) /
@@ -181,6 +182,7 @@ export default function ModelViewer({
         : fitDistance
       const directions = {
         inscriptions: [0, 0.08, -1],
+        roof: [-1, 1.15, -1],
         detail: [0, 0.08, 1],
         overview: model.focus?.direction || model.direction || [1, 0.65, 1.2],
         site: model.direction || [1, 0.65, 1.2],
@@ -373,7 +375,8 @@ export default function ModelViewer({
             )
           const texture = new THREE.MeshBasicMaterial({
             map,
-            color: map ? 0xffffff : 0xbca987,
+            color: map || object.geometry.attributes.color ? 0xffffff : 0xbca987,
+            vertexColors: Boolean(object.geometry.attributes.color),
             side: THREE.DoubleSide,
           })
           const stone = new THREE.MeshStandardMaterial({

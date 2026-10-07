@@ -1,9 +1,15 @@
 {
-  "nativeGateTriangles": 4749393,
+  "nativeGateTriangles": 4740539,
   "contextTriangles": 299999,
+  "roofTriangles": 97835,
+  "repairTriangles": 19593,
   "textureDimension": 8192,
   "textureAtlases": 11,
-  "geometry": "Original gate vertices and UVs retained; context decimated. Draco position quantization: 20 bits.",
+  "roofTextureDimension": [
+    4096,
+    2880
+  ],
+  "geometry": "Captured gate and roof geometry retained. Surroundings reduced. Separate interpolated repair surfaces seal the upper scan gaps.",
   "gateRegion": {
     "x": [
       -0.6,
@@ -14,6 +20,7 @@
       -1.8
     ]
   },
-  "textureCompression": "KTX2 ETC1S, quality 255, original 8192 px, sRGB mipmaps",
-  "totalBytes": 169461632
+  "triangles": 5157966,
+  "textureCompression": "Original eleven 8K KTX2 atlases reused unchanged; native 4096\u00d72880 roof atlas encoded as KTX2 ETC1S quality 255.",
+  "totalBytes": 172782593
 }

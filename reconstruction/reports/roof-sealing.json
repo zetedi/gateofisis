@@ -1,0 +1,10 @@
+{
+  "roofBoundaryEdgesBridged": 1011,
+  "gateRimBoundaryEdgesBridged": 1085,
+  "smallUpperCaptureLoopsFilled": 44,
+  "patchTriangles": 19593,
+  "remainingUpperBoundaryEdges": 0,
+  "nonmanifoldEdgesInUpperRegion": 14,
+  "maxBridgeDistance": 0.11304032057523727,
+  "method": "Boundary-to-boundary triangle strips and local hole caps. Captured vertices and UVs are unchanged. Repair colors sampled from neighboring stone photographs; no inscriptions generated."
+}
